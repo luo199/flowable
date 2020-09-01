@@ -1,0 +1,29 @@
+input.fileboxDisplaynone{
+			background-color:#f4f9ff;
+			border: 0px solid;
+			font-size: 11pt ;
+}
+		 
+input.filebox{
+ 	height: 20px;
+ 	width:100px;
+ 	background-color: #F2FCF3;
+ 	border: 1px solid;
+ 	border-color: #cccccc;
+ 	font-size: 9pt ;
+ 	font-family: Verdana, Arial, Helvetica, sans-serif, 宋体 ;
+ 	color: #000000;
+ 	cursor:hand;
+}
+
+/* table.filebox td {
+	FONT-SIZE:12pt; font-family: Verdana, Arial, Helvetica, sans-serif, 宋体 ; font-size: 12pt ; 
+	padding: 0px; color:#000000;bgcolor:#e4e9ff;
+} */
+.filebox {
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+	bgcolor:#e4e9ff;
+	cellpadding:0px;
+	height: 200px;
+}

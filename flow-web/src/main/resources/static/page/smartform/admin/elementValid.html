@@ -1,0 +1,148 @@
+<div class="form-source-container wrapper">
+ <div class="form-source-bottom t-a-c">
+      <span class="close-validform pointer" onclick="closeValid()">x</span>
+		<form class="default-form element-validform" id="formElementsForm">
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16 width-200">是否为空：</label>
+				<div class="hs-input hs-input-select relative" id="isEmptyTb">
+				 <div class="more-box"></div>
+					<select class="hs-input input-inner none-select" name="isEmpty" id="isEmpty">
+						<option value="">-请选择-</option>
+						<option value="1">是</option>
+						<option value="2">否</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16 width-200">为空的错误提醒：</label>
+				<div class="hs-input">
+					<input required type="text" name="emptyMsg" autocomplete="off" class="input-inner" maxlength="50">
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16 width-200">是否有最小长度：</label>
+				<div class="hs-input hs-input-select relative" id="lengthMinTb">
+					<div class="more-box"></div>
+					<select class="hs-input input-inner" name="isLengthMin" id="isLengthMin">
+						<option value="">-请选择-</option>
+						<option value="1">是</option>
+						<option value="2">否</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16 width-200">最小长度：</label>
+				<div class="hs-input">
+					<input required type="number" name="lengthMin" autocomplete="off" class="input-inner" maxlength="50">
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16 width-200">小于最小长度的提醒：</label>
+				<div class="hs-input">
+					<input required type="text" name="lengthMinMsg" autocomplete="off" class="input-inner" maxlength="50">
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16 width-200">是否有最大长度：</label>
+				<div class="hs-input hs-input-select relative" id="isLengthMaxTb">
+					<div class="more-box"></div>
+					<select class="hs-input input-inner" name="isLengthMax" id="isLengthMax">
+						<option value="">-请选择-</option>
+						<option value="1">是</option>
+						<option value="2">否</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16 width-200">最大长度：</label>
+				<div class="hs-input">
+					<input required type="number" name="lengthMax" autocomplete="off" class="input-inner" maxlength="50">
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16 width-200"> 大于最大长度的提醒：</label>
+				<div class="hs-input">
+					<input required type="text" name="lengthMaxMsg" autocomplete="off" class="input-inner" maxlength="50">
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16 width-200">是否不得小于某个数字：</label>
+				<div class="hs-input hs-input-select relative" id="isNumericMinTb">
+					<div class="more-box"></div>
+					<select class="hs-input input-inner" name="isNumericMin" id="isNumericMin">
+						<option value="">-请选择-</option>
+						<option value="1">是</option>
+						<option value="2">否</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16 width-200"> 最小数字：</label>
+				<div class="hs-input">
+					<input required type="number" name="numericMin" autocomplete="off" class="input-inner" maxlength="50">
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16 width-200"> 小于最小数字的提醒：</label>
+				<div class="hs-input">
+					<input required type="text" name="numericMinMsg" autocomplete="off" class="input-inner" maxlength="50">
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16 width-200">是否不得大于某个数字：</label>
+				<div class="hs-input hs-input-select relative" id="isNumericMaxTb">
+					<div class="more-box"></div>
+					<select class="hs-input input-inner" name="isNumericMax" id="isNumericMax">
+						<option value="">-请选择-</option>
+						<option value="1">是</option>
+						<option value="2">否</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16 width-200"> 最大数字：</label>
+				<div class="hs-input">
+					<input required type="number" name="numericMax" autocomplete="off" class="input-inner" maxlength="50">
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16 width-200"> 大于最大数字的提醒：</label>
+				<div class="hs-input">
+					<input required type="text" name="numericMaxMsg" autocomplete="off" class="input-inner" maxlength="50">
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16 width-200">是否正则表达式：</label>
+				<div class="hs-input hs-input-select relative" id="sRegularExpressionTb">
+					<div class="more-box"></div>
+					<select class="hs-input input-inner" name="sRegularExpression" id="sRegularExpression">
+						<option value="">-请选择-</option>
+						<option value="1">是</option>
+						<option value="2">否</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16 width-200"> 正则表达式：</label>
+				<div class="hs-input">
+					<input required type="text" name="regularExpression" autocomplete="off" class="input-inner" maxlength="50">
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16 width-200"> 不符合正则的提示信息：</label>
+				<div class="hs-input">
+					<input required type="text" name="errorMessage" autocomplete="off" class="input-inner" maxlength="50">
+				</div>
+			</div>
+			<div class="form-item-button t-a-c">
+				<input class="hs-button button-default" onclick="resetFormElements()" value="重置" type="button" readonly/>
+			 	<input class="hs-button button-primary" value="确认" type="submit" readonly/>
+			</div>
+			<input type="hidden" name="validatorId" value="">
+			<input type="hidden" name="businessId" value="">
+			<input type="hidden" name="formId" value="">
+			<input type="hidden" name="elementId" value="">
+		</form>
+	</div>
+</div>
+<script type="text/javascript" src="../../../js/smartform/admin/elementValid.js"></script>

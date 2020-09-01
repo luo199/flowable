@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html  xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>附件文档编辑</title>
+  	<meta charset="UTF-8"/>
+	<meta content="IE=7" http-equiv="X-UA-Compatible" /> 
+	<!--设置缓存-->
+	<meta http-equiv="cache-control" content="no-cache,must-revalidate">
+	<meta http-equiv="pragram" content="no-cache">
+	<meta http-equiv="expires" content="0">
+    <style>
+  		html,body{height: 100%;width: 100%;margin: 0;padding: 0;}
+  		.op1{border-width: 1px;border-style: solid;border-color: #c1c1c1;padding: 2px 6px;cursor: pointer;margin: 8px 0 0 8px;display: inline-block;}
+  		a.op1:active{background-color: #c1c1c1;}
+  		.fr {float:right;color:red;margin-right:8px;}
+    </style>
+</head>
+<body onload="init()"  onbeforeunload ="onPageClose()" >
+   <form id="myform" method="post" action="" enctype="multipart/form-data" >
+        <div style="font: Menu; background:  ButtonFace;height:40px;">
+        	<button id="closeDocument" class="op1 fr" onclick="closeDoc();" >退出编辑并解锁</button>
+          	<a class="op1" onclick="saveFileToUrl();">保  存</a>&nbsp;&nbsp;
+            <a class="op1" onclick="showToolbars(this);">显示工具栏</a>&nbsp;&nbsp;
+            <a class="op1" onclick="showRevisions(this);" id="visionController">显示痕迹</a>
+        </div>
+        <div id="officecontrol">
+			<object id="TANGER_OCX" classid="clsid:01DFB4B4-0E07-4e3f-8B7A-98FD6BFF153E" 
+				codeBase="/static/lib/risefile/commons/ocx/ofctnewclsid.cab#version=5,0,2,6" width="100%" height="100%">
+				<param name="BorderStyle" value="0">
+				<param name="BorderColor" value="14402205">
+				<param name="TitlebarColor" value="53668">
+				<param name="TitlebarTextColor" value="0">
+				<param name="MenubarColor" value="13160660">
+				<param name="Titlebar" value="0">
+				<param name="MaxUploadSize" value="10000000">
+				<param name="CustomMenuCaption" value="辅助选项">
+				<param name="MakerCaption" value="北京有生博大软件技术有限公司">
+				<param name="MakerKey" value="7CAA90E9B33637E9A390DDD12B9149C3FBC57687">
+				<param name="ProductCaption" value="有生协同办公系统">
+				<param name="ProductKey" value="78380CB25E22DB886E7883E780435D901D936D8C">
+				<param name="WebFileName" value=""><!-- <%=fileName %> -->
+				<SPAN STYLE="color:red">不能装载文档控件。请在检查浏览器的选项中检查浏览器的安全设置。</SPAN>
+			</object>
+        </div>
+    </form>
+</body>
+	<script type="text/javascript">
+	    function init(){  
+	        var  tanger_ocx = document.getElementById("TANGER_OCX");
+	        tanger_ocx.FileNew=false;
+	        tanger_ocx.ToolBars = false;
+	        tanger_ocx.FileOpen = false;
+	        tanger_ocx.FileClose = false;
+	        var appnamehouzui = getQueryString('nameSubstr');//var appnamehouzui = '<%=nameSubstr %>';
+	        var primaryId = getQueryString('primaryId');
+	        var ss = parent;
+	        var url = window.opener.window.top.contextPath + window.opener.window.portPath.downloadAttachementById + "?fileId="+primaryId;//var url = "/servlet/RisefileViewData1?fileGUID=<%=fileGUID%>&appname=<%=appname %>";
+	         if(appnamehouzui.toLowerCase()=='doc'||appnamehouzui.toLowerCase()=='docx'){
+	        	tanger_ocx.BeginOpenFromURL(url,false,false,"Word.Document");
+	        }else if(appnamehouzui.toLowerCase()=='xls'){
+	        	tanger_ocx.BeginOpenFromURL(url,false,false,"Excel.Sheet");
+	        }else if(appnamehouzui.toLowerCase()=='ppt'||appnamehouzui.toLowerCase()=='pptx'){
+	        	tanger_ocx.BeginOpenFromURL(url,false,false,"PowerPoint.Show");
+	        }else{
+	        	tanger_ocx.OpenFromURL(url);
+	        } 
+	        //默认显示痕迹 延时1s,不延时ActiveDocument为null
+	         setTimeout(function(){
+	        		document.getElementById("TANGER_OCX").ActiveDocument.ShowRevisions=true;
+	        		printRevisions(true);
+	        		document.getElementById("visionController").value="隐藏痕迹"; 
+	         },1000);
+	         TimedRefresh();
+	    }
+	    function getQueryString(name){//获取地址栏参数
+		     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		     var r = window.location.search.substr(1).match(reg);
+		     if(r!=null)return  unescape(r[2]); return null;
+		}
+	    function TimedRefresh(){
+	   		setInterval(sendPost,600000);//1分钟，1s=1000ms
+	   	}
+	   	function sendPost(){
+// 	   		window.opener.forwardPage();
+	   		this.$.post("black.jsp");
+	   	}
+	    function initOld(){
+	    	
+	    }
+	    
+	    
+	    function saveFileToUrl(){
+	    	var  tanger_ocx = document.getElementById("TANGER_OCX");
+	    	var fileName = unescape(getQueryString('fileName'));
+	    	var instanceId = getQueryString('instanceId');
+	    	var attachementType = getQueryString('attachementType');
+	    	var fileGUID = getQueryString('fileGUID');
+	    	var a=tanger_ocx.SaveToURL(window.opener.window.top.contextPath + window.opener.window.portPath.saveOrUpdateAttachement + "?onclickType=save&fileGUID="+fileGUID+"&instanceId="+instanceId+"&attachementType="+attachementType, "attachFile", "", fileName,"myform");
+	    	updateDocumentInfo(a,tanger_ocx);
+	    }
+	    
+	   function updateDocumentInfo(info,riseOffice) {
+	        try {
+	          if(info.indexOf("success")>-1) {
+	            riseOffice.ShowTipMessage("提示信息","保存文件成功！",false);
+	            document.getElementById("TANGER_OCX").ActiveDocument.Saved = true;
+	          }else {
+	            riseOffice.ShowTipMessage("错误信息","保存文件错误，请联系管理员！",true);
+	            return;
+	          }
+	        }
+	        catch(e) {
+	        }
+	      } 
+	   
+	    function onPageClose(){
+			/*var  tanger_ocx = document.getElementById("TANGER_OCX");
+			if(!tanger_ocx.activeDocument.saved){
+				if(confirm( "文档修改过,还没有保存,是否需要保存?")){
+					saveFileToUrl();
+				}
+			} */
+			//window.opener.location.reload();
+		}
+	    
+	    function showToolbars(da) {
+			var s=da.value;
+			if(s=='显示工具栏')	{
+				document.getElementById("TANGER_OCX").Toolbars=true;
+			  da.value='隐藏工具栏';	
+			}else{
+				document.getElementById("TANGER_OCX").Toolbars=false;
+			 da.value='显示工具栏';	
+			}
+		 }
+	    
+	 // 控制修订文字显示
+		 function showRevisions(da) {
+		 var s=da.value;
+		 if(s=='显示痕迹')	{
+			document.getElementById("TANGER_OCX").ActiveDocument.ShowRevisions=true;
+		    printRevisions(true); 
+		    da.value='隐藏痕迹';	
+		 }else	{
+			document.getElementById("TANGER_OCX").ActiveDocument.ShowRevisions=false;
+		    printRevisions(false);
+		    da.value='显示痕迹';	
+		   }
+		}
+	 
+		// 控制修订文字打印
+		function printRevisions(bool) {
+			document.getElementById("TANGER_OCX").ActiveDocument.PrintRevisions=bool;
+		}
+		
+		function setMarkModify(bool) {
+			document.getElementById("TANGER_OCX").ActiveDocument.TrackRevisions=bool;
+		}
+		
+		function setReviewMode(bool) {
+			//打开的时候隐藏痕迹
+			showRevisions(false);
+			//留痕
+			SetDocUser();
+			//进入保留痕迹状态
+			setMarkModify(true);
+		}
+		
+		 function SetDocUser() {
+		   with(document.getElementById("TANGER_OCX").ActiveDocument.Application) {
+			   document.getElementById("TANGER_OCX").WebUserName='';//'<%=user.getUserName()%>';
+		   }
+		 }
+		 
+		 //退出的时候保存
+		 function saveFileToUrlClose(){
+		    	var  tanger_ocx = document.getElementById("TANGER_OCX");
+		    	var fileName = unescape(getQueryString('fileName'));
+		    	var instanceId = getQueryString('instanceId');
+		    	var attachementType = getQueryString('attachementType');
+		    	var fileGUID = getQueryString('fileGUID');
+		    	var a=tanger_ocx.SaveToURL(window.opener.window.top.contextPath + window.opener.window.portPath.saveOrUpdateAttachement + "?onclickType=save&fileGUID="+fileGUID+"&instanceId="+instanceId+"&attachementType="+attachementType, "attachFile", "", fileName,"myform");
+		    	updateDocumentInfo(a,tanger_ocx);
+		 }
+		 
+		 function closeDoc(){
+			 if(confirm('是否保存对文档的修改？')){
+				 saveFileToUrlClose();
+			 } 
+			 var instanceId = getQueryString('instanceId');
+			 var attachId = getQueryString('fileGUID');
+			 var params = "lockSource=3&operation=3&attachmentId="+attachId+"&instanceId="+instanceId;
+			 var _url = window.opener.window.top.contextPath + window.opener.window.portPath.unlockAttachement;
+			 window.opener.window.common.networkConnect(_url, "POST", window.opener.window.conType.conTyForm, params, function(res) {
+		     	if (res.exchangeStatus == 1) {
+		     		if (res.exchangeStatus == 1) {
+			        	alert(res.message);
+			        }else{
+			        	alert("服务异常");
+			        }
+					window.close();
+					/* var isnewwindow = window.parent.document.getElementById('isNewWindowOpen');
+					if(isnewwindow!=null){
+						 window.parent.changeDiv('wjcl_form');
+					}else{
+						//window.open('','_self','');
+					 	window.close();
+					} */
+		        }
+		     });
+		 }
+    </script>
+    <script language="JScript" for="TANGER_OCX" event="OnFileCommand(cmd,canceled)">
+	  if(cmd == 3) {
+		  saveFileToUrl();
+		  document.getElementById("TANGER_OCX").CancelLastCommand = true;
+	  }
+    </script>
+    <script language="JScript" for="TANGER_OCX" event="AfterOpenFromURL(tanger_ocx)">
+      setReviewMode(true);
+      //doc.TrackRevisions = true; //进入痕迹保留状态
+    </script>
+</html>

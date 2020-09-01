@@ -1,0 +1,53 @@
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../../../lib/layer-3.1.1/theme/default/layer.css">
+<link rel="stylesheet" href="../../../lib/huasiPagination/huasi-pagination.min.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/common.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/original/index.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/original/form.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/iconfont/iconfont.css" />
+<div id="detailContainer" class="h100 w100">
+	<div class="top-operations clear">
+		<div id="headOperationButtonTb" class="fl">
+		<script id="headOperationButtonTemplate" type="text/html">
+		{{if listData.length>0}}
+			{{each listData as obj index}}
+			<div class="operation-item pointer" onclick="{{obj.code.toLowerCase()}}Operation()">
+				<i class="iconfont icon-header-save"></i>
+				<span class="font-16">{{obj.name}}</span>
+			</div>
+			{{/each}}
+		{{/if}}
+		</script>
+		</div>
+		<div class="top-operations-right fr">
+		 	<div class="operation-item pointer font-16 lineblock" onclick="javascript:history.go(-1);">
+				返回
+			</div>
+		</div>
+	</div>
+	<div class="bottom-content">
+		<div id="wrapper" class="h100 w100 list-page">
+			<div class="center-contianer-bm">
+				<div class="h100 w100 bg0">
+					<iframe class="h100 w100" id="ifrMainContent"></iframe>
+					<div class="h100 w100" id="formMainContent"></div><!-- 加载多表单  -->
+	            </div>
+			</div>
+			<div class="right-contianer-sm">
+				<div class="h100 w100 bg0" id="detailRightContainer"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="../../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../../lib/lodash.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../../../lib/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.form.js"></script>
+<script type="text/javascript" src="../../../lib/layer-3.1.1/layer.js"></script>
+<script type="text/javascript" src="../../../lib/art-template-4.13.2.min.js"></script>
+<script type="text/javascript" src="../../../lib/huasiPagination/huasiPagination.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/config.js"></script>
+<script type="text/javascript" src="../../../js/officialdoc/detail/detail.js"></script>

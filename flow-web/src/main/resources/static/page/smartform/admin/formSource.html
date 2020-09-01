@@ -1,0 +1,123 @@
+<div class="form-source-container wrapper">
+	<form class="w100 pad-16 bg0">
+		<textarea class="h100 w100" id="ckeditor" name="ckeditor"></textarea>
+	</form>
+	<div class="form-source-bottom t-a-c">
+		<form class="default-form noneDisplay" id="formElementsForm">
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16">数据库表名：</label>
+				<div class="hs-input hs-input-select relative" id="eleColTableTb">
+					<div class="more-box"></div>
+					<select class="hs-input input-inner" name="eleColTable">
+						<option value="">-请选择-</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16">字段英文名称：</label>
+				<div class="hs-input hs-input-select relative" id="colEgNameTb">
+					<div class="more-box"></div>
+					<select class="hs-input input-inner" name="colEgName">
+						<option value="">-请选择-</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16">字段类别：</label>
+				<div class="hs-input hs-input-select relative" id="colTypeTb">
+					<div class="more-box"></div>
+					<select class="hs-input input-inner" name="colType">
+						<option value="">-请选择-</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16">字段中文名称：</label>
+				<div class="hs-input">
+					<input required type="text" name="colChName" autocomplete="off" class="input-inner" maxlength="50">
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16">元素英文名：</label>
+				<div class="hs-input">
+					<input required type="text" name="eleEgName" autocomplete="off" class="input-inner" maxlength="100">
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16">元素类型：</label>
+				<div class="hs-input">
+					<input required type="text" name="eleType" autocomplete="off" class="input-inner" maxlength="100">
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16">是否主键：</label>
+				<div class="hs-input hs-input-select relative">
+					<div class="more-box"></div>
+					<select required class="hs-input input-inner" name="primaryKey">
+						<option value="">-请选择-</option>
+						<option value="1">是</option>
+						<option value="2">否</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-item clear lineblock">
+				<label class="form-label font-16">是否实例键：</label>
+				<div class="hs-input hs-input-select relative">
+					<div class="more-box"></div>
+					<select required class="hs-input input-inner" name="instanceKey">
+						<option value="">-请选择-</option>
+						<option value="1">是</option>
+						<option value="2">否</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-item-button t-a-c">
+				<input class="hs-button button-default" onclick="resetFormElements()" value="重置" type="button" readonly/>
+			 	<input class="hs-button button-primary" value="确认" type="submit" readonly/>
+			</div>
+			<input type="hidden" name="eleColId">
+			<input type="hidden" name="businessId">
+			<input type="hidden" name="formId">
+			<input type="hidden" name="version">
+		</form>
+	</div>
+</div>
+<script id="eleColTableTemplate" type="text/html">
+<div class="more-box"></div>
+<select class="hs-input input-inner" name="eleColTable" onchange="getFiledsByTablename(this.value)">
+	<option value="">-请选择-</option>
+	{{if listData.length>0}}
+	{{each listData as value index}}
+		{{set obj = listData[index]}}
+		{{if obj == eleData }}<option value="{{obj}}" selected>{{obj}}</option>
+		{{else}}<option value="{{obj}}">{{obj}}</option>{{/if}}
+	{{/each}}
+	{{/if}}
+</select>
+</script>
+<script id="colTypeTemplate" type="text/html">
+<div class="more-box"></div>
+<select class="hs-input input-inner" name="colType">
+	<option value="">-请选择-</option>
+	{{if listData.length>0}}
+	{{each listData as value index}}
+		{{set obj = listData[index]}}
+		<option value="{{obj}}">{{obj}}</option>
+	{{/each}}
+	{{/if}}
+</select>
+</script>
+<script id="colEgNameTemplate" type="text/html">
+<div class="more-box"></div>
+<select class="hs-input input-inner" name="colEgName" onchange="changeColEgName(this)">
+	<option value="">-请选择-</option>
+	{{if listData.length>0}}
+	{{each listData as value index}}
+		{{set obj = listData[index]}}
+		<option value="{{obj.COLUMN_NAME}}" data-type={{obj.DATA_TYPE}}>{{obj.COLUMN_NAME}}</option>
+	{{/each}}
+	{{/if}}
+</select>
+</script>
+<script type="text/javascript" src="../../../lib/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="../../../js/smartform/admin/formSource.js"></script>

@@ -1,0 +1,98 @@
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="../../../css/common.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/original/index.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/iconfont/iconfont.css" />
+<div class="comment-container h100 wrapper">
+	<p class="font-14 t-a-c color999">（注：如有增加附件，请在意见中说明详见附件）</p>
+	<div class="comment-record noneDisplay" id="commentRecord">
+		<div class="comment-title color333 font-18">拟办意见填写记录&nbsp;<i class="icon-xiala triangle-right pointer"></i></div>
+		<!-- <ul>
+			<li class="clear">
+				<span class="color333 font-18 elips comment-content">同意同意。同意。同意。同意。同意。同意。同意。同意。同意。同意。同意。同意。同意。同意。。</span>
+				<span class="fr color999 font-16 elips">----录入人员：李牧叶  ----录入时间：2018-11-08 17:19:01</span>
+			</li>
+			<li class="clear">
+				<span class="color333 font-18 elips comment-content">同意。</span>
+				<span class="fr color999 font-16 elips">----录入人员：李牧叶  ----录入时间：2018-11-08 17:19:01</span>
+			</li>
+			<li class="clear">
+				<span class="color333 font-18 elips comment-content">同意。</span>
+				<span class="fr color999 font-16 elips">----录入人员：李牧叶  ----录入时间：2018-11-08 17:19:01</span>
+			</li>
+			<li class="clear">
+				<span class="color333 font-18 elips comment-content">同意。</span>
+				<span class="fr color999 font-16 elips">----录入人员：李牧叶  ----录入时间：2018-11-08 17:19:01</span>
+			</li>
+		</ul> -->
+	</div>
+	<div class="comment-main">
+		<div class="comment-edit">
+			<div class="edit-top clear">
+				<div class="fr">
+					<span class="font-14 color666">实际处理人： </span>
+					<input class="comment-person font-14 color666" type="text" name="Comment_Person" value="黄春光">
+					<span class="font-14 color666">处理时间： </span>
+				</div>
+			</div>
+			<form id="userCommentEditForm">
+				<input type="hidden" name="businessId"/>
+				<input type="hidden" name="commentId"/>
+				<input type="hidden" name="formId"/>
+				<input type="hidden" name="commentTypeId"/>
+				<input type="hidden" name="instanceId"/>
+				<input type="hidden" name="terminal" value="0"/><!-- 终端 0-pc 1-pad 2-手机 3-微信 -->
+				<textarea class="w100" id="editOftenCommentContent" name="commentContent" rows="10" autofocus="autofocus"></textarea>
+			</form>
+			<div class="person-comment">
+				<div class="person-comment-top">
+					<span class="font-18 color333">常用语&nbsp;</span>
+					<i class="iconfont icon-xiala color999 pointer" onclick="toggleOpinion('SelectPersonalComment',this)"></i>
+					<span class="font-18 pointer theme-color" onclick="createOftenComment()">&emsp;&emsp;存为常用语</span>
+					<div class="lineblock fr color999 font-16 pointer hover-color">
+						前往个人中心常用语设置&nbsp;<i class="icon-xiala triangle-right"></i>
+					</div>
+				</div>
+				<div class="select-person-comment w100 wrapper" id="userOftenCommentTb">
+				<script id="userOftenCommentTemplate" type="text/html">
+				{{if listData.length>0}}
+					{{each listData as obj index}}
+					<div class="font-18 color666 clear">
+						<div class="elips pointer person-content" title="{{obj.commentContent}}">
+							<input name="oftenCommentInput" class="noneDisplay" type="text" value="{{obj.commentContent}}">
+							<span data-name="oftenCommentSpan" ondblclick="appendComment('{{obj.commentContent}}')">{{obj.commentContent}}</span>
+						</div>
+						<div data-name="hideEditBtn" class="fr lineblock">
+							<i title="编辑" class="iconfont icon-edit pointer" onclick="showEditOftenComment({{index}})"></i>
+							<i title="删除" class="iconfont icon-remove pointer" onclick="deleteOftenComment('{{obj.oftenCommentId}}', {{index}})"></i>
+							{{if index != 0 }}<i title="上移" class="iconfont icon-shangyi pointer" onclick="sortOftenComment('{{listData[index-1].oftenCommentId}}', '{{obj.oftenCommentId}}')"></i>{{/if}}
+							{{if listData.length-1 != index}}<i title="下移" class="iconfont icon-xiayi pointer" onclick="sortOftenComment('{{obj.oftenCommentId}}', '{{listData[index+1].oftenCommentId}}')"></i>{{/if}}
+						</div>
+						<div data-name="showEditBtn" class="fr lineblock noneDisplay">
+							<div class="submint-btn pointer" onclick="updateOftenComment('{{obj.oftenCommentId}}', {{index}})">确定</div>
+							<div class="submint-btn pointer" onclick="hideEditOftenComment()">取消</div>
+						</div>
+					</div>
+					{{/each}}
+				{{else}}
+					<p class="font-18 color666">暂无数据</p>
+				{{/if}} 
+				</script> 
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="comment-bottom table">
+		<div class="table-cell t_a_l" name="cmdDelete" onclick="javascript:deleteComment()"><span class="pointer">删除意见</span></div>
+		<div class="table-cell t_a_l" name="save" onclick="javascript:saveComment()"><span class="pointer">保存意见</span></div>
+	</div>
+</div>
+<script type="text/javascript" src="../../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.form.js"></script>
+<script type="text/javascript" src="../../../lib/layer-3.1.1/layer.js"></script>
+<script type="text/javascript" src="../../../lib/art-template-4.13.2.min.js"></script>
+<script type="text/javascript" src="../../../lib/huasiPagination/huasiPagination.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/config.js"></script>
+<script src="../../../js/officialdoc/detail/comment.js"></script>

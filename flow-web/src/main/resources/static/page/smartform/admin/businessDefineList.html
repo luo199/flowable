@@ -1,0 +1,173 @@
+<link rel="stylesheet" href="../../../lib/layer-3.1.1/theme/default/layer.css">
+<link rel="stylesheet" href="../../../lib/huasiPagination/huasi-pagination.min.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/common.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/original/index.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/iconfont/iconfont.css" />
+<div id="businessDefineContainer" class="h100 w100">
+	<div class="top-operations clear">
+		<div class="operation-item pointer" onclick="showEditDialog('add')">
+			<i class="iconfont icon-sqr-add"></i>
+			<span class="font-16">新增</span>
+		</div>
+		<div class="operation-item pointer" onclick="showEditDialog('update')">
+			<i class="iconfont icon-edit"></i>
+			<span class="font-16">修改</span>
+		</div>
+		<div class="operation-item pointer" onclick="removeBusinessDefineById()">
+			<i class="iconfont icon-remove"></i>
+			<span class="font-16">删除</span>
+		</div>
+		<div class="operation-item pointer" onclick="openMenuResourceDialog()">
+			<i class="iconfont icon-link"></i>
+			<span class="font-16">按钮资源配置</span>
+		</div>
+		<div class="operation-item pointer" onclick="openMenuFilterDialog()">
+			<i class="iconfont icon-link"></i>
+			<span class="font-16">按钮过滤配置</span>
+		</div>
+		<div class="operation-item pointer" onclick="openBusinessRelationPage()">
+			<i class="iconfont icon-link"></i>
+			<span class="font-16">业务配置</span>
+		</div>
+		<div class="top-operations-right fr">
+			<form id="queryBusinessDefineForm" class="default-form">
+				<input type="hidden" id="businessPage" name="page"/>
+				<input type="hidden" name="rows" value="20"/>
+				<div class="form-item clear lineblock">
+					<label class="form-label font-16">业务英文名称：</label>
+					<div class="hs-input">
+						<input type="text" name="businessName" autocomplete="off" class="input-inner" maxlength="50">
+					</div>
+				</div>
+				<div class="form-item-button lineblock">
+			  		<input class="hs-button button-primary" id="businessDefineSubmitButton" value="确认" type="submit" readonly/>
+			  		<input class="hs-button button-primary" value="重置"  type="reset" readonly/>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="bottom-content">
+		<div id="wrapper" class="h100 w100 bg0">
+			<div class="w100 pad-16" id="listDatas">
+				<input id="selectedBusinessDefine" value="" type="hidden"/>
+				<table class="default-table w100">
+					<thead>
+						<tr class="t-a-l color333 font-18">
+							<th width="10%"> 序号</th>
+							<th width="45%">业务英文名称</th>
+							<th width="25%">业务创建者</th>
+							<th width="20%">创建日期</th>
+						</tr>
+					</thead>
+					<tbody id="businessDefineTb" class="color666 font-16">
+						 <script id="businessDefineTemplate" type="text/html">
+							{{if listData.list.length>0}}
+								{{each listData.list as obj index}}
+									<tr>
+										<td>
+											<label for="{{obj.businessId}}" class="hs-checkbox">
+												<input name="checkboxTest" id="{{obj.businessId}}" value="" onclick="updateSelection(this,'{{obj.businessId}}')" type="radio" class="checkbox-original">
+												<span class="checkbox-input">
+								    				<span class="checkbox-inner"></span>
+												</span>
+												<span class="checkbox-label">{{listData.currentPage*listData.size+index+1}}</span>
+						    				</label>
+										</td>
+										<td>{{obj.businessName}}</td>	
+										<td>{{obj.creatorName}}</td>
+										<td>{{obj.createDateTime | dateFormat 'yyyy-MM-dd hh:mm:ss'}}</td>
+									</tr>
+							 	{{/each}}
+							 {{else}}
+								<tr><td colspan="4" align="center">暂无数据</td></tr>
+							 {{/if}}  
+						 </script>
+					</tbody>
+				</table>
+			</div>
+			<div class="paging clear padr-16"><!--分页 -->
+				<div id="huasiPagination"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 业务定义弹窗 -->
+<div id="businessDefineFormDialog">
+	<form id="businessDefineForm" class="default-form">
+		<div class="form-item clear">
+			<label class="form-label font-16">业务英文名称：</label>
+			<div class="hs-input">
+				<input required type="text" name="businessName" autocomplete="off" class="input-inner" maxlength="50">
+			</div>
+		</div>
+		<div class="form-item-button">
+			<input class="hs-button button-default" onclick="closeEditDialog()" value="取消" type="button" readonly/>
+	  		<input class="hs-button button-primary" value="确认" type="submit" readonly/>
+		</div>
+		<input type="hidden" name="businessId">
+		<input type="hidden" name="version">
+	</form>
+</div>
+<!-- 按钮资源配置弹窗 -->
+<div id="menuResourceFormDialog">
+	<form id="menuResourceForm" class="default-form">
+		<div class="form-item clear" id="menuResourceTb">
+			<script id="menuResourceTemplate" type="text/html">
+			{{if listData.length>0}}
+				{{each listData as obj index}}
+				<label for="{{obj.id}}" class="hs-checkbox padb-16">
+					{{ if businessButtonResourceID&&businessButtonResourceID.indexOf(obj.id) > -1 }}
+    					<input name="businessButtonResourceID" checked id="{{obj.id}}" type="radio" class="checkbox-original" value="{{obj.id}}">
+					{{ else }}
+						<input name="businessButtonResourceID" id="{{obj.id}}" type="radio" class="checkbox-original" value="{{obj.id}}">
+					{{ /if }}    				
+					<span class="checkbox-input"><span class="checkbox-inner"></span></span>
+    				<span class="checkbox-label font-16">{{obj.name}}</span>
+    			</label>
+				{{/each}}
+			{{else}}
+				暂无数据
+			{{/if}}
+			</script>
+    	</div>
+		<input type="hidden" name="businessId">
+		<input type="hidden" name="businessName">
+		<input type="hidden" name="version">
+	</form>
+</div>
+<!-- 按钮过滤配置弹窗 -->
+<div id="menuFilterFormDialog">
+	<form id="menuFilterForm" class="default-form">
+		<div class="form-item clear" id="menuFilterTb">
+			<script id="menuFilterTemplate" type="text/html">
+			{{if listData.length>0}}
+				{{each listData as obj index}}
+				<label for="{{obj}}" class="hs-checkbox padb-16">
+					{{ if buttonFilterBeanName&&buttonFilterBeanName.indexOf(obj) > -1 }}
+    					<input name="buttonFilterBeanName" checked id="{{obj}}" type="radio" class="checkbox-original" value="{{obj}}">
+					{{ else }}
+						<input name="buttonFilterBeanName" id="{{obj}}" type="radio" class="checkbox-original" value="{{obj}}">
+					{{ /if }}
+    				<span class="checkbox-input"><span class="checkbox-inner"></span></span>
+    				<span class="checkbox-label font-16">{{obj}}</span>
+    			</label>
+				{{/each}}
+			{{else}}
+				暂无数据
+			{{/if}}
+			</script>
+    	</div>
+		<input type="hidden" name="businessId">
+		<input type="hidden" name="version">
+	</form>
+</div>
+<script type="text/javascript" src="../../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.form.js"></script>
+<script type="text/javascript" src="../../../lib/layer-3.1.1/layer.js"></script>
+<script type="text/javascript" src="../../../lib/art-template-4.13.2.min.js"></script>
+<script type="text/javascript" src="../../../lib/huasiPagination/huasiPagination.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/config.js"></script>
+<script type="text/javascript" src="../../../js/smartform/admin/businessDefineList.js"></script>

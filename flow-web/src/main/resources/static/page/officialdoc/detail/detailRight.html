@@ -1,0 +1,124 @@
+<div class="h100 w100 wrapper detail-right">
+	<div id="rightFormDefinedTabTb">
+	<script id="rightFormDefinedTabTemplate" type="text/html">
+	{{if listData.length>0}}
+		{{each listData as obj index}}
+		<div class="areatitle" id="{{obj.formEgName}}FormTab">
+			<div class="clear relative pointer">
+				<span class="theme-color parent-node noneDisplay"></span>
+				<span class="padl-32 font-18 color666" is-first-show="{{index == 0}}" onclick="changFormTabCenterView('{{obj.formEgName}}');">{{obj.formChName}}</span> 
+				<span class="right-check">
+					<span class="color999 font-16" onclick="changFormTabCenterView('{{obj.formEgName}}');"><i class="iconfont icon-chuanyue padr-8"></i>查看</span>
+				</span>
+			</div>
+		</div>
+		{{/each}}
+	{{/if}}
+	</script>
+	</div>
+<!-- 	<div class="areatitle right-block-sel" id="wjclForm">
+		<div class="clear relative pointer">
+			<span class="theme-color parent-node"></span>
+			<span class="padl-32 font-18 color666 theme-color" onclick="changCenterView('wjclForm');">公文办理单</span> 
+			<span class="right-check">
+				<span class="color999 font-16" onclick="changCenterView('wjclForm');"><i class="iconfont icon-chuanyue padr-8"></i>查看</span>
+				<span class="fr font-16 theme-color pointer"><i class="iconfont icon-header-print"></i>打印</span>
+			</span>
+		</div>
+	</div> -->
+	<div class="areatitle" id="document">
+		<div class="clear relative pointer">
+			<span class="theme-color parent-node noneDisplay"></span>
+			<input type="hidden" id="isHasDoc" value=""/>
+			<input type="hidden" id="hasDocExec" value=""/>
+			<button id="browseDoc" disabled class="browse-zw" onclick="browseZW()">
+				<span class="padl-32 color666 font-18">正文</span>
+				<span class="font-16 color999" id="isNotDoc">（暂无文件！）</span>
+				<span class="font-16 org noneDisplay" id="isBrowserZw"><i class="padl-16 iconfont icon-document padr_8"></i>有1份文件！</span>
+			</button> 
+			<!-- <span class="font-16 padl-16 fr iconfont icon-add theme-color" onclick="changCenterView('document');"></span> -->
+			<span id="addDocumentBtn" class="iconfont icon-add theme-color pointer relative fr" onclick="toggleBtn('toggleAddDocbtn')">
+				<ul class="head-admin add-document-btn" id="toggleAddDocbtn">
+					<li class="pointer"><a href="javascript:void(0);" onclick="addZW(0)">添加word</a></li>
+					<li class="pointer"><a href="javascript:void(0);" onclick="addDocument()">上传PDF</a></li> 
+				</ul>
+			</span>
+			<span class="font-16 color999 pointer fr padl-16 noneDisplay" id="newEditDocId" onclick="newWindowEdit()">新窗口编辑</span>
+			<span class="font-16 color999 pointer fr noneDisplay" id="editDocId" onclick="addZW(1)">编辑</span>
+		</div>
+	</div>
+	<div class="f-line"></div>
+	<div class="areatitle" id="attachment">
+		<div class="clear relative pointer sm-title">
+			<span class="theme-color parent-node noneDisplay"></span>
+			<span class="font-16 color999 relative" onclick="changCenterView('attachment');"><span class="b_line_lt"></span>附件&nbsp;<span class="data-num">0</span><span class="b_line_rb"></span></span> 
+			<!-- <span class="font-16 padl-16 fr iconfont icon-add theme-color" onclick="changCenterView('attachment');"></span> -->
+		</div>
+		<div class="areatitle-con">
+			<iframe class="w100" src="" id="attachmentContent" style="height: 240px;"></iframe>
+			<!-- <div class="file-list file-list-all clear marb-8">
+				<span class="checkbox-block">
+					<input id="checkAllfj" type="checkbox">
+					<label for="checkAllfj" class="input_label_nocheck pointer"><span class="iconfont icon-xuanze font_18 color999"></span></label>
+					<label for="checkAllfj" class="input_label_checked pointer"><span class="iconfont icon-xuanzhong font_18 color999"></span></label>
+				</span>
+				<span class="font_16 color999">全选</span>
+				<span id="chooseDownload" class="fr pointer lineblock font-14 green" onclick="chooseDownload()">
+					<i class="iconfont icon-xiazai font-16"></i>&nbsp;批量下载
+				</div>
+			</div> -->
+		</div>
+	</div>
+	<div class="areatitle" id="beijing">
+		<div class="clear relative pointer sm-title">
+			<span class="theme-color parent-node noneDisplay"></span>
+			<span class="font-16 color999 relative" onclick="changCenterView('beijing');"><span class="b_line_lt"></span>相关文件&nbsp;<span class="data-num">0</span><span class="b_line_rb"></span></span> 
+			<!-- <span class="font-16 padl-16 fr iconfont icon-add theme-color" onclick="changCenterView('beijing');"></span> -->
+		</div>
+		<div class="areatitle-con">
+			<iframe class="w100" src="" id="beijingAttachmentContent" style="height: 240px;"></iframe>
+		</div>
+	</div>
+	<div class="areatitle" id="relevantId">
+		<div class="clear relative pointer sm-title">
+			<span class="theme-color parent-node noneDisplay"></span>
+			<span class="font-16 color999 relative"><span class="b_line_lt"></span>关联文件&nbsp;<span class="data-num">0</span><span class="b_line_rb"></span></span> 
+			<span class="font-16 padl-16 fr iconfont icon-add theme-color" onclick="openRelatedLayer('relevantId');"></span>
+		</div>
+		<div class="areatitle-con" id="relevantContent"></div>
+	</div>
+	<div class="areatitle" id="replayId">
+		<div class="clear relative pointer sm-title">
+			<span class="theme-color parent-node noneDisplay"></span>
+			<span class="font-16 color999 relative" onclick="changCenterView('replayId');"><span class="b_line_lt"></span>回复文件&nbsp;<span class="data-num">0</span><span class="b_line_rb"></span></span> 
+		</div>
+		<div class="areatitle-con" id="replayOffice">
+			<div class="reply-list">
+				<span class="font-16 color5b width-198 elips lineblock padl-16" title="标题">委办局</span>
+				<span class="color999 font-16 fr pointer padl-16 hover-color">正文</span>
+				<span class="color999 font-16 fr pointer padl-16 hover-color">附件</span>
+				<span class="color999 font-16 fr pointer padl-16 hover-color">表单</span>
+			</div>
+	    </div>
+	</div>
+	<div class="f-line"></div>
+	<div class="areatitle" id="trackId">
+		<div class="clear pointer relative">
+		   <span class="theme-color parent-node noneDisplay"></span>
+		   <span class="padl-32 font-18 color666" onclick="changCenterView('trackId','/static/page/officialdoc/detail/courseView.html');">历程</span>
+		   <span class="color999 font-16 padl-16" onclick="changCenterView('trackId','/static/page/officialdoc/detail/courseView.html');"><i class="iconfont icon-chuanyue padr-8"></i>查看</span>
+		</div>
+	</div>
+</div>
+<!-- 上传PDF弹窗 -->
+<div id="uploadPdfDialog" class="formdialogBox">
+	<form id="uploadPdfForm" class="default-form">
+	    <span class="changeFile"   οnclick="uploadReportPdf()">选择文件 :</span>
+		<div class="form-item clear">
+		     <input id="uploadPDF" name="file" type="file" class="file uploadPDF" accept="application/pdf" multiple/>
+             <input class="showFile" type="text">
+         </div>
+         <div class="uploadFile">上传</div>
+	</form>
+</div>
+<script type="text/javascript" src="../../../js/officialdoc/detail/detailRight.js"></script>

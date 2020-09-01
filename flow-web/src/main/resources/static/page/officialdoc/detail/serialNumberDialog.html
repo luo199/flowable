@@ -1,0 +1,121 @@
+<link rel="stylesheet" href="../../../lib/layer-3.1.1/theme/default/layer.css">
+<link rel="stylesheet" href="../../../lib/huasiPagination/huasi-pagination.min.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/common.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/original/index.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/iconfont/iconfont.css" />
+<div id="relavantContainer" class="h100 w100">
+	<div class="top-operations clear top-operations-diff">
+	   <div class="operation-item pointer" onclick="showSerialbox('add')">
+			<i class="iconfont icon-sqr-add"></i>
+			<span class="font-16">新增</span>
+		</div>
+		<div class="operation-item pointer" onclick="showSerialbox('update')">
+			<i class="iconfont icon-edit"></i>
+			<span class="font-16">修改</span>
+		</div>
+		 <div class="operation-item pointer" onclick="removeSerialNumById()">
+			<i class="iconfont icon-remove"></i>
+			<span class="font-16">删除</span>
+		</div>
+	</div>
+	<div class="bottom-content">
+		<div id="wrapper" class="h100 w100 bg0">
+			<div class="w100" id="listDatas">
+				<input id="selectedBusinessDefine" value="" type="hidden"/>
+				<table class="default-table w100">
+					<thead>
+						<tr class="t-a-l color333 font-18">
+							<th width="10%">选择</th>
+							<th width="20%">编号类型</th>
+							<th width="9%">前缀</th>
+							<th width="9%">年号</th>
+							<th width="9%">月份</th>
+							<th width="10%">流水号</th>
+							<th width="20%">样例</th>
+							<th width="9%">操作</th>
+						</tr>
+					</thead>
+					<tbody id="serialNumberTb"  class="color666 font-16">
+						 <script id="serialNumberTemplate" type="text/html">
+							{{if listData.list.length>0}}
+								{{each listData.list as obj index}}
+									<tr>
+										<td>
+											<label for="{{obj.codeId}}" class="hs-checkbox">
+												<input name="checkboxTest" id="{{obj.codeId}}" value="{{obj.codeId}}" onclick="getChexkbox()" type="radio" class="checkbox-original">
+												<span class="checkbox-input">
+								    				<span class="checkbox-inner"></span>
+												</span>
+												<span class="checkbox-label">{{(listData.currentPage-1)*listData.size+index+1}}</span>
+						    				</label>
+										</td>
+										<td>{{obj.codeType}}</td>
+                                        <td>{{obj.prefix}}</td>
+                                        <td>{{obj.yearFormat}}位数</td>
+                                        <td>{{obj.monthFormat}}位数</td>
+                                        <td>{{obj.numberFormat}}位数</td>
+                                        <td>{{obj.example}}</td>
+                                        <td class="pointer" onclick="toParentData('{{obj.example}}','{{obj.codeId}}','{{obj.nowValue}}')">选用</td>		
+									</tr>
+							 	{{/each}}
+							{{/if}}  
+						 </script>
+					</tbody>
+				</table>
+			</div>
+		    <div class="add-update-box">
+		    <form id="add-update-serialnumber">
+		    <div>
+		     <label>文号类型：</label>
+		     <input type="text" name="codeType" value="">
+		    </div>
+		     <div>
+		    <label>前缀：</label>
+		     <input type="text" name="prefix" value="">
+		    </div>
+		     <div>
+		    <label>年号：</label>
+		     <select name="yearFormat">
+		      <option value="2">2位</option>
+		      <option value="4">4位</option>
+		     </select>
+		    </div>
+		     <div>
+		    <label>月份：</label>
+		     <select name="monthFormat">
+		      <option value="无">无</option>
+		      <option value="2">2位</option>
+		     </select>
+		    </div>
+		     <div>
+		    <label>流水号：</label>
+		     <select name="numberFormat">
+		      <option value="3">3位</option>
+		      <option value="4">4位</option>
+		      <option value="5">5位</option>
+		     </select>
+		    </div>
+		    <input type="hidden" name="codeId" value="">
+		   <div class="form-item-button add-update-btn">
+			  		<input class="hs-button button-primary" id="" value="保存" type="submit" readonly="">
+			  		<input class="hs-button button-primary" value="取消" onclick="closeBox()" type="button" readonly="">
+			  	</div>
+			  
+			</form>
+		    </div>
+			<div class="paging clear padr-16 padtb-10"><!--分页 -->
+				<div id="huasiPagination"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="../../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.form.js"></script>
+<script type="text/javascript" src="../../../lib/layer-3.1.1/layer.js"></script>
+<script type="text/javascript" src="../../../lib/art-template-4.13.2.min.js"></script>
+<script type="text/javascript" src="../../../lib/huasiPagination/huasiPagination.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/config.js"></script>
+<script type="text/javascript" src="../../../js/officialdoc/detail/serialNumberDialog.js"></script>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huasisoft.flow.process.mapper.ActReProcdefMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.huasisoft.flow.process.entity.ActReProcdef">
+        <id column="ID_" property="id" />
+        <result column="REV_" property="rev" />
+        <result column="CATEGORY_" property="category" />
+        <result column="NAME_" property="name" />
+        <result column="KEY_" property="key" />
+        <result column="VERSION_" property="version" />
+        <result column="DEPLOYMENT_ID_" property="deploymentId" />
+        <result column="RESOURCE_NAME_" property="resourceName" />
+        <result column="DGRM_RESOURCE_NAME_" property="dgrmResourceName" />
+        <result column="DESCRIPTION_" property="description" />
+        <result column="HAS_START_FORM_KEY_" property="hasStartFormKey" />
+        <result column="HAS_GRAPHICAL_NOTATION_" property="hasGraphicalNotation" />
+        <result column="SUSPENSION_STATE_" property="suspensionState" />
+        <result column="TENANT_ID_" property="tenantId" />
+        <result column="DERIVED_FROM_" property="derivedFrom" />
+        <result column="DERIVED_FROM_ROOT_" property="derivedFromRoot" />
+        <result column="DERIVED_VERSION_" property="derivedVersion" />
+        <result column="ENGINE_VERSION_" property="engineVersion" />
+    </resultMap>
+    
+    <resultMap id="MaxVersionResultMap" type="com.huasisoft.flow.process.entity.ActReProcdef">
+        <id column="ID_" property="id" />
+        <result column="REV_" property="rev" />
+        <result column="CATEGORY_" property="category" />
+        <result column="NAME_" property="name" />
+        <result column="KEY_" property="key" />
+        <result column="VERSION_" property="version" />
+        <result column="DEPLOYMENT_ID_" property="deploymentId" />
+        <result column="RESOURCE_NAME_" property="resourceName" />
+        <result column="DGRM_RESOURCE_NAME_" property="dgrmResourceName" />
+        <result column="DESCRIPTION_" property="description" />
+        <result column="HAS_START_FORM_KEY_" property="hasStartFormKey" />
+        <result column="HAS_GRAPHICAL_NOTATION_" property="hasGraphicalNotation" />
+        <result column="SUSPENSION_STATE_" property="suspensionState" />
+        <result column="TENANT_ID_" property="tenantId" />
+        <result column="DERIVED_FROM_" property="derivedFrom" />
+        <result column="DERIVED_FROM_ROOT_" property="derivedFromRoot" />
+        <result column="DERIVED_VERSION_" property="derivedVersion" />
+        <result column="ENGINE_VERSION_" property="engineVersion" />
+        <result column="ENGINE_VERSION_" property="engineVersion" />
+        <result column="DEPLOY_TIME" property="deployTime" />
+    </resultMap>
+    
+    <select id="maxVersionPage" resultMap = "MaxVersionResultMap">
+    	select f.*,(select d.deploy_time_ from ${dbSchema}ACT_RE_DEPLOYMENT d where d.id_=f.deployment_id_) DEPLOY_TIME  
+		from ${dbSchema}ACT_RE_PROCDEF f where f.version_ = (select max(f2.version_) from ${dbSchema}ACT_RE_PROCDEF f2 where f2.key_=f.key_)
+		<if test="name!=null">
+			<bind name="pattern" value="'%' + name + '%'" />
+			and f.name_ like #{pattern}
+		</if>
+		order by DEPLOY_TIME
+    </select>
+    
+</mapper>

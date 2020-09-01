@@ -1,0 +1,129 @@
+<link rel="stylesheet" href="../../../lib/layer-3.1.1/theme/default/layer.css">
+<link rel="stylesheet" href="../../../lib/huasiPagination/huasi-pagination.min.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/common.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/original/index.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/iconfont/iconfont.css" />
+<div id="businessDefineContainer" class="h100 w100">
+	<div class="top-operations clear">
+		<div class="operation-item pointer" onclick="uploadBmmnXml()">
+			<i class="iconfont icon-sqr-add"></i>
+			<span class="font-16">导入</span>
+		</div>
+		<div id="btnSuspend" style="display:none;" class="operation-item pointer" onclick="suspendProcess()">
+			<i class="iconfont icon-link"></i>
+			<span class="font-16">挂起</span>
+		</div>
+		<div id="btnActivate" style="display:none;" class="operation-item pointer" onclick="activateProcess()">
+			<i class="iconfont icon-remove"></i>
+			<span class="font-16">激活</span>
+		</div>
+		<div class="operation-item pointer" onclick="deleteDeploy()">
+			<i class="iconfont icon-edit"></i>
+			<span class="font-16">删除</span>
+		</div>
+
+		<div class="top-operations-right fr">
+			<form id="queryProcessForm" class="default-form">
+				<input type="hidden" id="processPageCurrent" name="current"/>
+				<input type="hidden" id="processPageSize"name="size" value="20"/>
+				<div class="form-item clear lineblock">
+					<label class="form-label font-16">流程名称：</label>
+					<div class="hs-input">
+						<input type="text" name="name" autocomplete="off" class="input-inner" maxlength="50">
+					</div>
+				</div>
+				<div class="form-item-button lineblock">
+			  		<input class="hs-button button-primary" id="businessDefineSubmitButton" value="确认" type="submit" readonly/>
+			  		<input class="hs-button button-primary" value="重置"  type="reset" readonly/>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="bottom-content">
+		<div id="wrapper" class="h100 w100 bg0">
+			<div class="w100 pad-16" id="listDatas">
+				<input id="selectedBusinessDefine" value="" type="hidden"/>
+				<table class="default-table w100">
+					<thead>
+						<tr class="t-a-l color333 font-18">
+							<th width="10%"> 序号</th>
+							<th width="20%">流程名称</th>
+							<th width="15%">流程key</th>
+							<th width="10%">部署版本</th>
+							<th width="15%">部署日期</th>
+							<th width="10%">流程状态</th>
+							<th width="20%">流程图</th>
+						</tr>
+					</thead>
+					<tbody id="businessTb" class="color666 font-16">
+						 <script id="businessTemplate" type="text/html">
+							{{if listData.records.length>0}}
+								{{each listData.records as obj index}}
+									<tr>
+										<td>
+											<label for="{{obj.id}}" class="hs-checkbox">
+												<input name="checkboxTest" id="{{obj.id}}" value="" onclick="updateSelection(this,'{{obj.id}}','{{obj.suspensionState}}')" type="radio" class="checkbox-original">
+												<span class="checkbox-input">
+								    				<span class="checkbox-inner"></span>
+												</span>
+												<span class="checkbox-label">{{(listData.current-1)*listData.size+index+1}}</span>
+						    				</label>
+										</td>
+										<td>{{obj.name}}</td>
+										<td>{{obj.key}}</td>
+										<td>{{obj.version}}</td>
+										<td>{{obj.deployTime | dateFormat 'yyyy-MM-dd hh:mm:ss'}}</td>
+										{{if obj.suspensionState==1}}
+										<td>激活</td>
+										{{else}}
+										<td>挂起</td>
+										{{/if}}
+										<td><span onclick="showImageDialog('{{obj.id}}')">{{obj.dgrmResourceName}}</span></td>
+									</tr>
+							 	{{/each}}
+							 {{else}}
+								<tr><td colspan="4" align="center">暂无数据</td></tr>
+							 {{/if}}  
+						 </script>
+					</tbody>
+				</table>
+			</div>
+			<div class="paging clear padr-16"><!--分页 -->
+				<div id="huasiPagination"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 新增流程定义弹窗 -->
+<div id="uploadBmmnXmlDialog" class="formdialogBox">
+	<form id="uploadBmmnXmlForm" class="default-form">
+	    <span class="changeFile">选择文件 :</span>
+		<div class="form-item clear">
+		     <input id="uploadBmmnXml" name="file" type="file" class="file uploadPDF" accept=".bpmn20.xml" multiple/>
+             <input class="showFile" type="text">
+         </div>
+         <div class="uploadFile">上传</div>
+         <div class="form-item clear">
+         <span>请上传npmn20规范xml文件</span>
+         </div>
+	</form>
+</div>
+<!-- <div id="showImageDialog">
+		<div class="form-item clear">
+			<img id="image_1" src="" width="100%">
+        </div>
+
+		<div class="form-item-button">
+			<input class="hs-button button-default" onclick="closeImageDialog()" value="取消" type="button" readonly/>
+		</div>
+</div> -->
+<script type="text/javascript" src="../../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.form.js"></script>
+<script type="text/javascript" src="../../../lib/layer-3.1.1/layer.js"></script>
+<script type="text/javascript" src="../../../lib/art-template-4.13.2.min.js"></script>
+<script type="text/javascript" src="../../../lib/huasiPagination/huasiPagination.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/config.js"></script>
+<script type="text/javascript" src="../../../js/process/manage/list.js"></script>

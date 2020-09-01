@@ -1,0 +1,157 @@
+<link rel="stylesheet" type="text/css" href="../../../css/common.css" />
+<link rel="stylesheet" type="text/css" href="../../../lib/huasiPagination/huasi-pagination.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../../css/original/index.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/iconfont/iconfont.css" />
+<div id="todoContainer" class="h100 w100">
+	<div class="top-operations clear" onmouseover="hideDialog()">
+		<form id="listSearchForm" action="">
+		<input type="hidden" id="page" value="1" name="page"/>
+		<input type="hidden" value="10" name="rows"/>
+		<ul class="head-ul-noborder font-18 fl">
+        	<li class="fl pointer relative">
+            	<span class="pointer color999" id="typeSpan">办文类型</span><i class="iconfont icon-xiala"></i>
+                <ul id="bwType" class="w100 relative noneDisplay li-child">
+			        <li class="color666">所有<input class="noneDisplay" value=""></li>
+			        <li class="color666">办文<input class="noneDisplay" value="5"></li>
+			        <li class="color666">发文<input class="noneDisplay" value="6"></li>
+			        <input class="noneDisplay" value="">
+			    </ul>
+            </li>
+            <li class="fl pointer relative">
+            	<span class="pointer color999" id="levelSpan">紧急程度</span><i class="iconfont icon-xiala"></i>
+                <ul id="leveltypeSelect" class="w100 relative noneDisplay li-child">
+			    	<li class="color666">所有<input class="noneDisplay" value=""></li>
+			        <li class="color666">特提<input class="noneDisplay" value="特提"></li>
+			        <li class="color666">特急<input class="noneDisplay" value="特急"></li>
+			        <li class="color666">加急<input class="noneDisplay" value="加急"></li>
+			        <li class="color666">平件<input class="noneDisplay" value="平件"></li>
+			        <input class="noneDisplay" value="">
+		    	</ul>
+            </li>
+        </ul>
+        </form>
+		<div class="top-operations-right fr">
+			<div class="header-search">
+            	<div class="relative">
+                    <i id="searchButton" class="iconfont icon-search"></i>
+                    <input class="font-14 t-a-l" placeholder="请输入关键词" autofocus="" type="text" id="searchConment">
+                	<span class="more-condition more-button search-more"><span onclick="advancedSearch('all')">更多条件</span></span>
+                 </div>
+            </div>
+		</div>
+	</div>
+	<div class="bottom-content">
+		<div class="h100 w100 list-page">
+			<div class="center-contianer-bm">
+				<div class="h100 relative">
+	                <div class="list-data wrapper bg0" id="docListContianer">
+	               		<p class="text-title font-18 color666">暂未实现</p>
+	                <!-- <div class="w100 h100 t-a-c"><img class="nodata" width="32" src="../../../img/original/load.gif"></div> -->
+	                <script id="docListTemplate" type="text/html">
+					{{if listData.list.length > 0 }}
+						{{each listData.list as item index}}
+	                	<div class="list-item">
+                         <div class="left-block lineblock">
+								{{if item.urgency == '特提'}}
+	                            <span class="warn-block status1">特提</span>
+								{{else if item.urgency == '特急'}}
+								<span class="warn-block status2">特急</span>
+								{{else if item.urgency == '加急'}}
+								<span class="warn-block status3">加急</span>
+								{{else if item.urgency == '平件'}}
+								<span class="warn-block status4">平件</span>
+								{{/if}}
+	                        </div>
+	                        <div class="center-block lineblock" onmouseover="hideDialog()">
+	                       		<p class="text-title font-18 color666 elips pointer" title="{{item.title}}" onclick="openDetails('{{item.instanceId}}')">{{item.title}}</p>
+	                        	<p class="color999 font-18">
+	                        		<span class="tip-block tip-status1">1天</span>
+	                        		<span class="tip-block">批</span>
+	                        		<span class="v-a-c">[{{item.businessName}}] {{item.receiptDept}} → 上一发送人 <span class="lineblock circle-point"></span> </span>
+	                        		<span class="v-a-c">{{item.createDateTime | dateFormat:'MM/dd hh:mm'}}</span>
+	                        	</p>
+	                        </div>
+	                        <div class="right-block lineblock relative">
+                                {{ if item.hasStar == 1}} 
+                                   <img class="right-block-img" style="width:30px;" src="{{contextPath}}/static/img/original/collect-sel.png" id="change-sel{{index}}" onclick="toSaveLabel('{{item.instanceId}}','collect','{{index}}','change-sel')" data-change=false  />
+                                {{ else }}
+								   <img class="right-block-img" src="{{contextPath}}/static/img/original/collect.png" id="change{{index}}" onclick="toSaveLabel('{{item.instanceId}}','collect','{{index}}','change')" data-change=false  onmouseout="onmouseoutChangeImgSrc('{{contextPath}}/static/img/original/collect.png','change{{index}}')" onmouseover="this.src='{{contextPath}}/static/img/original/collect-hover.png'"/>
+	                           {{/if}}
+                                  <img class="right-block-img" style="display:none;width:30px;" src="{{contextPath}}/static/img/original/collect-sel.png" id="change-sel{{index}}" onclick="toSaveLabel('{{item.instanceId}}','collect','{{index}}','change-sel')" data-change=false  />
+                                  <img class="right-block-img" style="display:none;" src="{{contextPath}}/static/img/original/collect.png" id="change{{index}}" onclick="toSaveLabel('{{item.instanceId}}','collect','{{index}}','change')" data-change=false  onmouseout="onmouseoutChangeImgSrc('{{contextPath}}/static/img/original/collect.png','change{{index}}')" onmouseover="this.src='{{contextPath}}/static/img/original/collect-hover.png'"/> 
+	                              <span class="iconfont icon-biaoqian font-18 color999" onclick="openDialog('{{item.instanceId}}','{{index}}')"></span>
+	                              <span class="iconfont icon-remove font-18 color999" data-id={{item.instanceId}} onclick="removeRecycle(this)"></span>
+	                           <div id="label-dialog">
+                            </div>
+                         </div>
+                         <div class="list-center-line"></div>
+	                    </div>
+						
+						{{/each}}
+					{{else}}
+						<div class="nodata t-a-c"><img class="padb-16" alt="走丢了。。。" src="../../../img/original/noData.png"><p class="font-18 color666">暂时还没有相关文件</p></div>
+					{{/if}}
+					</script>
+	                 </div>
+					<div class="paging clear padr-16 list-page" id="huasiPagination"><!--分页 -->
+					</div>
+				</div>
+			</div>
+			<div class="right-contianer-sm" id="circleContainer" onmouseover="hideDialog()"></div>
+		</div>
+	</div>
+</div>
+<script id="labelListTemplate" type="text/html">
+   <div class="label-tem-box">
+	{{if listData.length > 0 }}
+	 {{each listData as item index}}
+     <div class="label-data pointer elips">
+        {{ if item.hasAtt != 0}}
+            <span title="{{item.tagName}}" class="red"  onclick="toSaveLabel('{{ item.tagId }}','','{{parentIndex}}','',this,'{{listData}}','{{item.hasAtt}}')">{{item.tagName}}</span>
+        {{else}}
+            <span title="{{item.tagName}}"  onclick="toSaveLabel('{{ item.tagId }}','','{{parentIndex}}','',this,'{{listData}}','{{item.hasAtt}}')">{{item.tagName}}</span>
+           {{/if}}
+        </div>
+       {{/each}}
+      {{/if}}
+       </div>
+          <div>   
+           <span class="iconfont icon-add  pointer label-add" onclick="openInput()"></span>
+           <input class="label-input" type="text" name="" onkeydown="submitData(event)" value="">
+           </div>
+</script>
+<form id="deptListFormDialog" class="default-form">
+	<script id="deptListTemplate" type="text/html">
+	<br><input id="docTypeId" type="hidden" value={{docType}}>
+	{{each list as obj index}}
+	<div class="form-item clear padl-16">
+		<label for="deptId{{index}}" class="hs-checkbox">
+			{{if index == 0 }}
+			<input name="checkboxTest" id="deptId{{index}}" data-name="{{obj.name}}" data-id="{{obj.id}}" value="" type="radio" class="checkbox-original" checked>
+ 			{{else}}
+			<input name="checkboxTest" id="deptId{{index}}" data-name="{{obj.name}}" data-id="{{obj.id}}" value="" type="radio" class="checkbox-original">
+			{{/if}}
+			<span class="checkbox-input">
+   				<span class="checkbox-inner"></span>
+			</span>
+			<span class="checkbox-label font-16">{{obj.name}}</span>
+ 		</label>
+	</div>
+	{{/each}}
+	<br>
+	<div class="form-item-button">
+		<input class="hs-button button-default" onclick="closeDeptListEditDialog()" value="取消" type="button" readonly/>
+	  	<input class="hs-button button-primary" value="确认" type="submit" readonly/>
+	</div>
+    </script>
+</form>
+<script type="text/javascript" src="../../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.form.js"></script>
+<script type="text/javascript" src="../../../lib/layer-3.1.1/layer.js"></script>
+<script type="text/javascript" src="../../../lib/art-template-4.13.2.min.js"></script>
+<script type="text/javascript" src="../../../lib/huasiPagination/huasiPagination.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/config.js"></script>
+<script type="text/javascript" src="../../../js/officialdoc/list/done.js"></script>

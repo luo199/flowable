@@ -1,0 +1,130 @@
+<link rel="stylesheet" href="../../../lib/layer-3.1.1/theme/default/layer.css">
+<link rel="stylesheet" href="../../../lib/huasiPagination/huasi-pagination.min.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/common.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/original/index.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/iconfont/iconfont.css" />
+<div id="bookmarkContainer" class="h100 w100">
+	<div class="top-operations clear top-operations-diff">
+		<div class="operation-item pointer" onclick="showBookmarkEditDialog()">
+			<i class="iconfont icon-edit"></i>
+			<span class="font-16">修改</span>
+		</div>
+		<div class="top-operations-right fr">
+		 	<div class="operation-item pointer font-16 lineblock" onclick="javascript:history.go(-1);">
+				返回
+			</div>
+		</div>
+	</div>
+	<div class="bottom-content cover-bottom-content">
+		<div id="wrapper" class="h100 w100 bg0">
+			<div class="w100 pad-16" id="listDatas">
+				<input id="selectedBookmarkId" type="hidden"/>
+				<table class="default-table w100">
+					<thead>
+						<tr class="t-a-l color333 font-18">
+							<th width="10%"> 序号</th>
+							<th width="40%">书签名</th>
+							<th width="30%">表名</th>
+							<th width="20%">字段名</th>
+						</tr>
+					</thead>
+					<tbody id="bookmarkTb" class="color666 font-16">
+						 <script id="bookmarkTemplate" type="text/html">
+							{{if bookmarkData.length>0}}
+								{{each bookmarkData as value index}}
+									{{set obj = bookmarkData[index]}}
+									<tr>
+										<td>
+											<label for="{{obj.bookmarkId}}" class="hs-checkbox">
+												<input name="checkboxBookmark" id="{{obj.bookmarkId}}" value="" onclick="updateBookmarkSelection(this,'{{obj.bookmarkId}}')" type="radio" class="checkbox-original">
+												<span class="checkbox-input">
+								    				<span class="checkbox-inner"></span>
+												</span>
+												<span class="checkbox-label">{{index+1}}</span>
+						    				</label>
+										</td>
+										<td>{{obj.bookmarkName}}</td>	
+										<td>{{obj.fieldTab}}</td>
+										<td>{{obj.fieldCol}}</td>
+									</tr>
+							 	{{/each}}
+							 {{else}}
+								<tr><td colspan="5" align="center">暂无数据</td></tr>
+							 {{/if}}  
+						 </script>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 模板定义弹窗 -->
+<div id="bookmarkFormDialog">
+	<form id="bookmarkForm" class="default-form">
+		<div class="form-item clear">
+			<label class="form-label font-16">书签名称：</label>
+			<div class="hs-input">
+				<input required type="text" readonly name="bookmarkName" autocomplete="off" class="input-inner" maxlength="50">
+			</div>
+		</div>
+		<div class="form-item clear">
+			<label class="form-label font-16">表名：</label>
+			<div class="hs-input">
+				<div id="allFormTb">
+					<select class="hs-input input-inner" name="fieldTab">
+						<option value="">-请选择-</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="form-item clear">
+			<label class="form-label font-16">字段名：</label>
+			<div class="hs-input">
+				<div id="formColTb">
+					<select class="hs-input input-inner" name="fieldCol" onclick="layer.msg('请先选择表名')">
+						<option value="">-请选择-</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="form-item-button">
+			<input class="hs-button button-default" onclick="closeBookmarkEditDialog()" value="取消" type="button" readonly/>
+	  		<input class="hs-button button-primary" id="" value="确认" type="submit" readonly/>
+		</div>
+		<input type="hidden" name="bookmarkId">
+		<input type="hidden" name="templateId">
+		<input type="hidden" name="version">
+	</form>
+</div>
+<script id="allFormTemplate" type="text/html">
+<select class="hs-input input-inner" name="fieldTab" onchange="queryFormColList(this);">
+	<option value="">-请选择-</option>
+	{{if bookmarkData.length>0}}
+	{{each bookmarkData as value index}}
+		{{set obj = bookmarkData[index]}}
+		<option value="{{obj.formChName}}" form-id="{{obj.formId}}">{{obj.formChName}}</option>
+	{{/each}}
+	{{/if}}
+</select>
+</script>
+<script id="formColTemplate" type="text/html">
+<select class="hs-input input-inner" name="fieldCol">
+	<option value="">-请选择-</option>
+	{{if bookmarkData.length>0}}
+	{{each bookmarkData as value index}}
+		{{set obj = bookmarkData[index]}}
+		<option value="{{obj.colEgName}}">{{obj.colEgName}}</option>
+	{{/each}}
+	{{/if}}
+</select>
+</script>
+<script type="text/javascript" src="../../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../../../lib/layer-3.1.1/layer.js"></script>
+<script type="text/javascript" src="../../../lib/art-template-4.13.2.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.form.js"></script>
+<script type="text/javascript" src="../../../lib/huasiPagination/huasiPagination.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/config.js"></script>
+<script type="text/javascript" src="../../../js/smartform/admin/textTemplateBookmark.js"></script>

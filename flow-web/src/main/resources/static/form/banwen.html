@@ -1,0 +1,203 @@
+<meta charset="UTF-8">
+<div class="form-container h100">
+<p class="t-a-c font-18 color666"><button class="hs-button" onclick="showViewOrEditForm(this,'basicFormTable','wjclFormTable')">基本信息</button> <button class="hs-button button-primary" onclick="showViewOrEditForm(this,'wjclFormTable','basicFormTable')">公文办理单</button></p>
+<div class="detail-table1">
+<form id="HS_BUS_M_RECEIPTINFO">
+	<!-- 基本信息 -->
+	<table cellpadding="0" cellspacing="0" border="0" class="base-table basic-form noneDisplay" id="basicFormTable">
+		<tbody>
+			<tr>
+				<td colspan="8">
+					<h1>文件基本信息表</h1><input class="ignore" type="hidden" name="formdeptname" /><!-- formdeptname需传给后台 -->
+					<input class="ignore" type="hidden" name="runningNumber" />
+				</td>
+			</tr>
+			<tr>
+				<td height="32" width="100" align="middle">公开程度</td>
+				<td align="left" colspan="3">
+					<select name="gongkaishuxing">
+						<option value="依申请公开">依申请公开</option>
+						<option value="主动公开">主动公开</option>
+						<option value="不予公开">不予公开</option>
+					</select>
+				</td>
+				<td height="32" width="100" align="middle">办文编号</td>
+				<td align="left" colspan="3"><input class="right-has-button" type="text" name="banwenbianhao" has-code="true"><input type="button" value="编号"  onclick="openNumberCardForm()"></td>
+			</tr>
+			<tr>
+				<td height="32" width="100" align="middle">紧急程度</td>
+				<td align="left" colspan="3">
+					<select name="jinjichengdu">
+						<option value="平件">平件</option>
+						<option value="加急">加急</option>
+						<option value="特急">特急</option>
+						<option value="特提">特提</option>
+					</select>
+				</td>
+				<td height="32" width="100" align="middle">类型</td>
+				<td align="left" colspan="3">
+					<select name="leixing">
+						<option value=" "></option>
+						<option value="通知">通知</option>
+						<option value="请示">请示</option>
+						<option value="函">函</option>
+						<option value="纪要">纪要</option>
+						<option value="决议">决议</option>
+						<option value="决定">决定</option>
+						<option value="命令（令）">命令（令）</option>
+						<option value="公报">公报</option>
+						<option value="公告">公告</option>
+						<option value="通告">通告</option>
+						<option value="意见">意见</option>
+						<option value="通报">通报</option>
+						<option value="报告">报告</option>
+						<option value="批复">批复</option>
+						<option value="议案">议案</option>
+						<option value="政务活动安排">政务活动安排</option>
+						<option value="其它">其它</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td height="32" width="100" align="middle">密级</td>
+				<td align="left" colspan="7">
+					<select name="miji">
+						<option value="公开">公开</option>
+						<option value="内部">内部</option>
+				 	</select>
+				</td>
+			</tr>
+			<tr>
+				<td height="32" width="100" align="middle">来文单位<font
+					style="color: red"></font></td>
+				<td align="left" colspan="3">
+					<input type="text" name="laiwendanwei">
+				</td>
+				<td height="32" width="100" align="middle">来文字号</td>
+				<td align="left" colspan="3"><input type="text" name="laiwenzi"></td>
+			</tr>
+			<tr>
+				<td height="32" width="100" align="middle">收文日期</td>
+				<td align="left" colspan="3"><input type="text" name="shouwenriqi" onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})"></td>
+				<td height="32" width="100" align="middle">办理期限</td>
+				<td align="left" colspan="3"><input type="text" name="banliqixian" onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})"></td>
+			</tr>
+			<tr>
+				<td height="32" width="100" align="middle">文件标题<font class="required-star">*</font></td>
+				<td align="left" colspan="7"><textarea name="wenjianbiaoti" rows="4"></textarea></td>
+			</tr>
+			<tr>
+				<td height="32" width="100" align="middle">备注</td>
+				<td align="left" colspan="7"><textarea name="beizhu" rows="4"></textarea></td>
+			</tr>
+			<tr>
+				<td height="32" width="100" align="middle">联系方式</td>
+				<td align="left" colspan="7" valign="middle"><textarea name="lianxifangshi" rows="4"></textarea></td>
+			</tr>
+		</tbody>
+	</table>
+	<!-- 公文办理单 -->
+	<div id="wjclFormTable">
+		<table border="0" width="665" id="wjclFormHead">
+			<tbody>
+				<tr>
+					<td height="30" width="75%"><p class="span-bureau-gw3">中共深圳市光明区委员会</p></td>
+					<td rowspan="2" widht="25%"><p class="span-bureau1">处理表</p></td>
+				</tr>
+				<tr><td width="75%" height="30"><p class="span-bureau-gw2">深圳市光明区人民政府</p></td></tr>
+			</tbody>
+		</table>
+		<table cellpadding="0" cellspacing="0" class="table" border="0" width="665">
+			<tbody>
+				<tr align="middle">
+					<td align="left" colspan="2">
+						<span class="span-th-title">紧急程度:</span>
+						<span class="span-th-content" data-name="jinjichengdu"></span>
+					</td>
+					<td align="left" colspan="2">
+						<span class="span-th-title">流水号:</span>
+						<span class="span-th-content" data-name="runningnumber"></span>
+					</td>
+					<td align="right" colspan="2">
+						<span class="span-th-title">密级:</span>
+						<span class="span-th-content" data-name="miji"></span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table cellpadding="0" cellspacing="0" border="0" class="base-table basic-form" width="665">
+			<tbody>
+				<tr>
+					<td height="40" width="100" align="middle" class="span-th">来文单位</td>
+					<td align="left" colspan="3" width="22%"><span class="span-th-content1" data-name="laiwendanwei"></span></td>
+					<td height="40" width="100" align="middle" class="span-th">收文日期 </td>
+					<td align="left" width="17%"><span class="span-th-content1" data-name="shouwenriqi"></span></td>
+					<td height="40" width="100" align="middle" class="span-th">办文编号 </td>
+					<td align="left" width="17%"><span class="span-th-content1" data-name="banwenbianhao"></span></td>
+				</tr>
+				<tr>
+					<td height="40" width="20%" align="middle" class="span-th">来文字号</td>
+					<td align="left" colspan="3">
+						<span class="span-th-content1" data-name="laiwenzi"></span>
+					</td>
+					<td height="40" width="100" align="middle" class="span-th">备注</td>
+					<td align="left" colspan="3">
+						<span class="span-th-content1" data-name="remark"></span>
+					</td>
+				</tr>
+				<tr>
+					<td height="46" width="100" align="middle" class="span-th">文件标题 <br>(内容摘要)</td>
+					<td align="left" colspan="7">
+						<span class="span-th-content1" data-name="wenjianbiaoti"></span>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="8" class="no-padding">
+						<table id="HS_BUS_D_PERSONDATE" class="no-padding table-fixed w100" cellpadding="0" cellspacing="0" border="0">
+							<tbody>
+								<tr>
+									<td width="100" height="40" align="middle" class="span-th">送出日期</td>
+									<td><span data-name="sendDate"></span></td>
+									<td><span data-name="sendDate"></span></td>
+									<td><span data-name="sendDate"></span></td>
+									<td><span data-name="sendDate"></span></td>
+									<td><span data-name="sendDate"></span></td>
+									<td><span data-name="sendDate"></span></td>
+									<td><span data-name="sendDate"></span></td>
+								</tr>
+								<tr>
+									<td width="100" height="40" align="middle" class="span-th">人名</td>
+									<td><span data-name="personName"></span></td>
+									<td><span data-name="personName"></span></td>
+									<td><span data-name="personName"></span></td>
+									<td><span data-name="personName"></span></td>
+									<td><span data-name="personName"></span></td>
+									<td><span data-name="personName"></span></td>
+									<td><span data-name="personName"></span></td>
+								</tr>
+								<tr>
+									<td width="100" height="40" align="middle" class="span-th">返回日期</td>
+									<td><span data-name="returnDate"></span></td>
+									<td><span data-name="returnDate"></span></td>
+									<td><span data-name="returnDate"></span></td>
+									<td><span data-name="returnDate"></span></td>
+									<td><span data-name="returnDate"></span></td>
+									<td><span data-name="returnDate"></span></td>
+									<td><span data-name="returnDate"></span></td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td height="49" align="left" colspan="8" id="commentTemplateId" style="padding: 0">
+						
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</form>
+</div>
+</div>
+<script type="text/javascript" src="../../../js/officialdoc/detail/form.js"></script>

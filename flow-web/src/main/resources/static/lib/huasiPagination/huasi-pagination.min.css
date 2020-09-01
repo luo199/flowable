@@ -1,0 +1,56 @@
+.ng-pagination {
+    font-family: 'Microsoft YaHei';
+    font-size: 12px;
+    color: #9c9c9c
+}
+
+.ng-pagination ul {
+    display: inline-block;
+    margin: 0;
+    padding: 0
+}
+
+.ng-pagination ul > li {
+    margin-right: 8px;
+    display: inline-block;
+    border-radius: 2px;
+}
+
+.ng-pagination ul > li button {
+    padding: 4px 12px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 2px;
+    color: #999;
+    height: 28px;
+    vertical-align: middle;
+}
+
+.ng-pagination ul > li button:disabled {
+    background: #ebebeb;
+    cursor: auto;
+}
+
+.ng-pagination ul > li.active, .ng-pagination ul > li.active button, .ng-pagination > ul > li:hover {
+    background-color: #00a0e9 !important;
+    border-color: #00a0e9;
+    color: #fff
+}
+
+.ng-pagination input {
+    margin-left: 8px;
+    width: 50px;
+    border-radius: 2px;
+    border: 1px solid #ddd;
+    vertical-align: 1px;
+    text-align: center;
+    padding: 4px 6px;
+    height: 28px;
+    vertical-align: middle;
+}
+
+.page-desc {
+    line-height: 28px;
+    vertical-align: middle;
+}

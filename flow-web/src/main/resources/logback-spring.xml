@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- 文件输出格式 -->
+	<!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+	<property name="PATTERN" value="%-12(%d{yyyy-MM-dd HH:mm:ss.SSS}) |-%-5level [%thread] %c [%L] -| %msg%n" />
+	
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 开发环境 -->
+	<springProfile name="dev">
+	    <appender name="DEV-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<!-- 文件名称 -->
+				<fileNamePattern>/huasiSoft/logs/flowLogs/dev/flow_dev-%d{yyyy-MM-dd}.log
+				</fileNamePattern>
+				<!-- 文件最大保存历史数量 日志文件保留天数 -->
+				<MaxHistory>100</MaxHistory>
+			</rollingPolicy>
+			<layout class="ch.qos.logback.classic.PatternLayout">
+				<pattern>${PATTERN}</pattern>
+			</layout>
+		</appender>
+		<root level="info">
+			<appender-ref ref="CONSOLE" />
+			<appender-ref ref="DEV-FILE" />
+		</root>
+		<logger name="com.huasisoft" level="debug"/>
+	</springProfile>
+	
+	<springProfile name="dev2">
+	    <appender name="DEV-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<!-- 文件名称 -->
+				<fileNamePattern>/huasiSoft/logs/flowLogs/dev/flow_dev-%d{yyyy-MM-dd}.log
+				</fileNamePattern>
+				<!-- 文件最大保存历史数量 日志文件保留天数 -->
+				<MaxHistory>100</MaxHistory>
+			</rollingPolicy>
+			<layout class="ch.qos.logback.classic.PatternLayout">
+				<pattern>${PATTERN}</pattern>
+			</layout>
+		</appender>
+		<root level="info">
+			<appender-ref ref="CONSOLE" />
+			<appender-ref ref="DEV-FILE" />
+		</root>
+		<logger name="com.huasisoft" level="debug"/>
+	</springProfile>
+
+	<!-- 测试环境 -->
+	<springProfile name="gmtest">
+		<appender name="GMTEST-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<!-- 文件名称 -->
+				<fileNamePattern>/huasiSoft/logs/flowLogs/gmtest/flow_gmtest-%d{yyyy-MM-dd}.log
+				</fileNamePattern>
+				<!-- 文件最大保存历史数量 日志文件保留天数 -->
+				<MaxHistory>100</MaxHistory>
+			</rollingPolicy>
+			<layout class="ch.qos.logback.classic.PatternLayout">
+				<pattern>${PATTERN}</pattern>
+			</layout>
+		</appender>
+		
+		<root level="info">
+			<appender-ref ref="CONSOLE" />
+			<appender-ref ref="GMTEST-FILE" />
+		</root>
+	</springProfile>
+
+	<!-- 光明正式环境 -->
+	<!-- <springProfile name="gmprod">
+		<appender name="GMPROD_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<fileNamePattern>/huasiSoft/logs/easyofficeLogs/gmprod/easyoffice_gmprod-%d{yyyy-MM-dd}.log</fileNamePattern>
+				<MaxHistory>100</MaxHistory>
+			</rollingPolicy>
+			<layout class="ch.qos.logback.classic.PatternLayout">
+				<pattern>${PATTERN}</pattern>
+			</layout>
+		</appender>
+		
+		<root level="warn">
+			<appender-ref ref="GMPROD_FILE" />
+		</root>
+	</springProfile> -->
+
+</configuration>

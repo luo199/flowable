@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huasisoft.flow.test.mapper.TestUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.huasisoft.flow.test.entity.TestUser">
+        <id column="USER_ID" property="userId" />
+        <result column="USER_NAME" property="userName" />
+        <result column="USER_AGE" property="userAge" />
+        <result column="USER_SEX_NAME" property="userSexName" />
+        <result column="USER_SEX_CODE" property="userSexCode" />
+    </resultMap>
+
+</mapper>

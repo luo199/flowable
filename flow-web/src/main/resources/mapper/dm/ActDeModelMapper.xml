@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huasisoft.flow.process.mapper.ActDeModelMapper">
+
+    <resultMap id="BaseResultMap" type="com.huasisoft.flow.process.entity.ActDeModel">
+        <id column="ID" property="id" />
+        <result column="NAME" property="name" />
+        <result column="MODEL_KEY" property="modelKey" />
+        <result column="DESCRIPTION" property="description" />
+        <result column="MODEL_COMMENT" property="modelComment" />
+        <result column="CREATED" property="created" />
+        <result column="CREATED_BY" property="createdBy" />
+        <result column="LAST_UPDATED" property="lastUpdated" />
+        <result column="LAST_UPDATED_BY" property="lastUpdatedBy" />
+        <result column="VERSION" property="version" />
+     <!--   <result column="MODEL_EDITOR_JSON" property="modelEditorJson" />
+        <result column="THUMBNAIL" property="thumbnail" />-->
+        <result column="MODEL_TYPE" property="modelType" />
+        <result column="TENANT_ID" property="tenantId" />
+    </resultMap>
+
+    <resultMap id="MaxVersionResultMap" type="com.huasisoft.flow.process.entity.ActDeModel">
+        <id column="ID" property="id" />
+        <result column="NAME" property="name" />
+        <result column="MODEL_KEY" property="modelKey" />
+        <result column="DESCRIPTION" property="description" />
+        <result column="MODEL_COMMENT" property="modelComment" />
+        <result column="CREATED" property="created" />
+        <result column="CREATED_BY" property="createdBy" />
+        <result column="LAST_UPDATED" property="lastUpdated" />
+        <result column="LAST_UPDATED_BY" property="lastUpdatedBy" />
+        <result column="VERSION" property="version" />
+        <!--   <result column="MODEL_EDITOR_JSON" property="modelEditorJson" />
+           <result column="THUMBNAIL" property="thumbnail" />-->
+        <result column="MODEL_TYPE" property="modelType" />
+        <result column="TENANT_ID" property="tenantId" />
+        <result column="MAX_VERSION" property="maxVersion" />
+    </resultMap>
+
+    <select id="maxVersionPage" resultMap = "MaxVersionResultMap">
+        select a.*,
+        (select max(version_)
+        from ${dbSchema}ACT_RE_PROCDEF p
+        where p.key_ = a.MODEL_KEY) as max_version
+        from ${dbSchema}ACT_DE_MODEL a
+        where a.model_type = 0
+        <if test="name!=null">
+            <bind name="pattern" value="'%' + name + '%'" />
+            and name like #{pattern}
+        </if>
+        order by last_updated desc, created desc
+    </select>
+</mapper>

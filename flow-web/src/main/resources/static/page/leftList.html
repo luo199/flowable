@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../css/common.css" />
+<link rel="stylesheet" type="text/css" href="../css/original/index.css" />
+<link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+</head>
+<body>
+<div id="wrapper" class="h100">
+	<div class="left-menu h100 bg0" id="leftMenuContianer">
+		<script id="leftMenuTemplate" type="text/html">
+			{{each list as menu index}}
+				<div class="left-menu-item">
+					<div class="menu-item menu-has-img clear">
+						<div class="fl circle28">
+							{{if menu.resourceIcon}}
+							<img src="{{contextPath}}/{{menu.resourceIcon}}">
+							{{else if menu.description}}
+							<span class="iconfont icon-{{menu.description}}"></span>
+							{{else}}
+							0
+							{{/if}}
+						</div>
+						<a class="font-18 pointer" href="javascript:void(0)" onclick="changCenterPage('{{menu.resourceUrl}}', {{index}})">{{menu.name}}</a>
+					</div>
+				</div>
+			{{/each}}
+		</script>
+	</div>
+</div>
+</body>
+<script type="text/javascript" src="../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../lib/jquery/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="../lib/art-template-4.13.2.min.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/leftList.js"></script>

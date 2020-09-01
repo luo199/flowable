@@ -1,0 +1,114 @@
+<div class="form-element-container" id="elesContainer">
+	<div class="h100 w100 bg0">
+		<div class="form-element-top">
+			<div id="topElesBtn" class="top-operations clear top-operations-diff">
+			<div class="operation-item pointer" onclick="showEditDialog('add')">
+					<i class="iconfont icon-add"></i>
+					<span class="font-16">新增</span>
+				</div>
+				<div class="operation-item pointer" onclick="showEditDialog('update')">
+					<i class="iconfont icon-edit"></i>
+					<span class="font-16">修改</span>
+				</div>
+				<div id="eleEditorRemoveBtn" class="operation-item pointer" onclick="removePermissionById()">
+					<i class="iconfont icon-remove"></i>
+					<span class="font-16">删除</span>
+				</div>
+				 <span class="close-validform pointer" onclick="closepermission()">x</span>
+			</div>
+			<div class="w100 pad-16 wrapper" id="permissionTable">
+				<input id="selectedFormElement" value="" type="hidden"/>
+				<table class="w100 default-table default-table-fixed">
+					<thead>
+						<tr>
+							<th style="width:10%">序号</th>
+							<th width="">元素ID</th>
+							<th>角色ID</th>
+							<th style="width:10%">操作许可</th>
+						</tr>
+					</thead>
+					<tbody id="permissionTb" class="color666 font-16">
+						 <script id="permissionTbTemplate" type="text/html">
+					    {{if list.length>0}}
+							{{each list as value index}}
+								{{set obj = list[index]}}
+								{{if(obj.businessId && obj.formId)}}<tr class="bg1">{{else}}<tr>{{/if}}
+									<td>
+										<label for="eleColId{{index}}" class="hs-checkbox">
+											<input name="checkboxTest" id="eleColId{{index}}" value="" onclick="updateSelection(this, '{{obj.permissionId}}')" type="radio" class="checkbox-original">
+											<span class="checkbox-input">
+								    			<span class="checkbox-inner"></span>
+											</span>
+											<span class="checkbox-label">{{index+1}}</span>
+						    			</label>
+									</td>
+									<td>{{obj.elementId}}</td>
+									<td>{{obj.roleID}}</td>
+                                   {{if (obj.permOpe == 1)}}
+									<td>屏蔽</td>
+                                   {{ else if (obj.permOpe == 2) }}
+                                    <td>可读</td>
+                                    {{ else if (obj.permOpe == 3) }}
+                                    <td>可写</td>
+                                    {{else}}
+                                    <td></td>  
+                                   {{/if}}
+								</tr>
+							 {{/each}}
+						{{else}}
+							<tr><td colspan="4" align="center">暂无数据</td></tr>
+						{{/if}}  
+				</script>
+					</tbody>
+				</table>
+				<input type="hidden" name="businessId" value="">
+		        <input type="hidden" name="formId" value="" >
+		        <input type="hidden" name="elementId" value="">
+			</div>
+		</div>
+	</div>
+</div>
+<div id="permissionFormDialog">
+	<form id="permissionForm" class="default-form">
+		<div class="permission-leftbox fl" style="width:60%">
+			<div class="form-item clear block">
+				<label class="form-label font-16">操作许可：</label>
+				<div class="hs-input hs-input-select relative" id="permOpeTb">
+					<div class="more-box"></div>
+					<select class="hs-input input-inner" name="permOpe" id="permOpe">
+						<option value="">-请选择-</option>
+						<option value="1">屏蔽</option>
+						<option value="2">可读</option>
+						<option value="3">可写</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-item clear">
+				<label class="form-label font-16">角色ID：</label>
+				<div class="hs-input" style="border-bottom: 1px solid #dcdfe6">
+					<input required type="text" name="roleName" autocomplete="off"
+						class="input-inner permission-test" maxlength="50">
+				</div>
+			</div>
+			<div class="form-item-button permission-btn">
+				<input class="hs-button button-primary" value="确认" type="button"
+					onclick="savePermissionData()" readonly  />
+			</div>
+		</div>
+
+		<div class="permission-rightbox fl">
+			<ul id="treeDemo" class="ztree" style="padding:0;"></ul>
+		</div>
+
+
+		<input type="hidden" name="businessId" value="">
+		<input type="hidden" name="permissionId" value=""> 
+		<input type="hidden" name="formId" value=""> 
+		<input type="hidden" name="taskID" value="">
+		<input type="hidden" name="elementId" value="">
+	    <input type="hidden" name="roleID" value=""> 
+		<input type="hidden" name="version" value="">
+	</form>
+</div>
+<script type="text/javascript" src="../../../lib/zTree_v3/js/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../../js/smartform/admin/permission.js"></script>

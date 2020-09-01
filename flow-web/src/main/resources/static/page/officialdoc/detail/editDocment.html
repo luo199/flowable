@@ -1,0 +1,545 @@
+<html>
+<head>
+<title>Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="../../../lib/jquery/jquery-2.2.4.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/config.js"></script>
+<script language="JScript" for="riseOffice" event="OnFileCommand(cmd,canceled)">
+  if(cmd == 3) {
+    saveDocument(0);
+    if(!isSaveAs) {
+      document.all.item("riseOffice").CancelLastCommand = true;
+    }
+  }else if(cmd == 2) {
+    window.close();
+    document.all.item("riseOffice").CancelLastCommand = true;
+  }else if(cmd == 4) {
+    isSaveAs = true;
+  }
+  
+</script>
+
+<script language="JScript" for="riseOffice" event="OnCustomMenuCmd(menuIndex,menuCaption,menuID)">
+	
+</script>
+
+<script language="JavaScript">
+	function checkSaved() {
+		if (0 != 1) {
+			if (!document.all.item("riseOffice").ActiveDocument.Saved
+					|| wordTitle != document.getElementById("WordTitle").value) {
+				if (confirm('是否保存对文档的修改？')) {
+					saveDocument(5);
+				}
+			}
+		}
+	}
+	function newDocument(type) {
+		try {
+			if (type == "newWord") {
+				document.all.item("riseOffice").CreateNew("Word.Document");
+			} else if (type == "newExcel") {
+				document.all.item("riseOffice").CreateNew("Excel.Sheet");
+			}
+		} catch (e) {
+			alert('无法新建文件！');
+		}
+		documentInit(0);
+	}
+
+	function openDocument() {
+		try {
+			var docId = window.common.getQueryString("docId");
+			var contextPath = window.opener ? window.opener.window.top.contextPath : window.top.contextPath;
+			document.all.item("riseOffice").OpenFromURL(contextPath + window.portPath.downloadDocByDocId + "?fileId="+docId, false);
+		} catch (e) {
+		}
+		documentInit(0);
+		var riseObj = document.all.item("riseOffice");
+		enableReviewBar(true);
+		riseObj.IsShowToolMenu = true;
+		var vw = riseObj.ActiveDocument.ActiveWindow.View;
+		var doc = document.all.item("riseOffice").ActiveDocument;
+		var app = doc.Application;
+		var cmdbars = app.CommandBars;
+		doc.TrackRevisions = true;
+		cmdbars("Reviewing").Enabled = true;
+		cmdbars("Reviewing").Visible = true;
+		cmdbars(40).Enabled = true;
+		cmdbars(40).Visible = true;
+		vw.RevisionsView = 0;
+		vw.ShowRevisionsAndComments = false;
+		showToolbars(false);
+	}
+
+
+	function documentInit(right) {
+		wordTitle = document.getElementById("WordTitle").value;
+		SetDocUser();
+		initCustomMenus();
+		enableFileNewMenu(false);
+		enableFileOpenMenu(true);
+		if (right == 1) {
+			setReadOnly(true);
+			enableFileSaveMenu(false);
+		} else {
+			showRevisions(false);
+			printRevisions(false);
+			if (true) {
+				setMarkModify(true);
+			} else {
+				setMarkModify(false);
+			}
+		}
+		document.all.item("riseOffice").ActiveDocument.Saved = true;
+	}
+	function SetDocUser() {
+		with (document.all.item("riseOffice").ActiveDocument.Application) {
+			document.all.item("riseOffice").WebUserName = window.opener ? window.opener.window.top.userName : window.top.userName;
+		}
+	}
+	function initCustomMenus() {
+		try {
+			var riseObj = document.all.item("riseOffice");
+		} catch (er) {
+			alert(er.description);
+		}
+	}
+	function showToolbars(da) {
+		var s = da.value;
+		if (s == '显示工具栏') {
+			document.all.item("riseOffice").Toolbars = true;
+			da.value = '隐藏工具栏';
+		} else {
+			document.all.item("riseOffice").Toolbars = false;
+			da.value = '显示工具栏';
+		}
+	}
+	function setReviewMode(bool) {
+		document.all.item("riseOffice").ActiveDocument.TrackRevisions = bool;
+	}
+
+	function showRevisions(da) {
+		var s = da.value;
+		if (s == '显示痕迹') {
+			document.all.item("riseOffice").ActiveDocument.ShowRevisions = true;
+			printRevisions(true);
+			da.value = '隐藏痕迹';
+		} else {
+			document.all.item("riseOffice").ActiveDocument.ShowRevisions = false;
+			printRevisions(false);
+			da.value = '显示痕迹';
+		}
+	}
+
+	function printRevisions(bool) {
+		document.all.item("riseOffice").ActiveDocument.PrintRevisions = bool;
+	}
+	function setReadOnly(bool) {
+		var i;
+		try {
+			if (bool) {
+				document.all.item("riseOffice").IsShowToolMenu = false;
+			}
+			with (document.all.item("riseOffice").ActiveDocument) {
+				if (document.all.item("riseOffice").DocType == 1) { //word
+					if ((ProtectionType != -1) && !bool) {
+						Unprotect();
+					}
+					if ((ProtectionType == -1) && bool) {
+						Protect(1, true, "");
+					}
+				} else if (document.all.item("riseOffice").DocType == 2) { //excel
+					for (i = 1; i <= Application.Sheets.Count; i++) {
+						if (bool) {
+							Application.Sheets(i).Protect("", true, true, true);
+						} else {
+							Application.Sheets(i).Unprotect("");
+						}
+					}
+					if (bool) {
+						Application.ActiveWorkbook.Protect("", true);
+					} else {
+						Application.ActiveWorkbook.Unprotect("");
+					}
+				}
+			}
+		} catch (err) {
+			alert("文档读写状态错误！");
+		} finally {
+		}
+	}
+	
+	function enableReviewBar(bool) {
+		try {
+			document.all.item("riseOffice").ActiveDocument.CommandBars("Reviewing").Enabled = bool;
+			document.all.item("riseOffice").ActiveDocument.CommandBars("Track Changes").Enabled = bool;
+			document.all.item("riseOffice").IsShowToolMenu = bool;
+		} catch (e) {
+			var doc = document.all.item("riseOffice").ActiveDocument;
+			var app = doc.Application;
+			var doctype = document.all.item("riseOffice").DocType;
+			if (6 != doctype) {
+				return;
+			}
+			var cmdbars = app.CommandBars;
+			document.all.item("riseOffice").IsShowToolMenu = !bool;
+			doc.TrackRevisions = bool;
+			cmdbars("Reviewing").Enabled = !bool;
+			cmdbars("Reviewing").Visible = !bool;
+			cmdbars(40).Enabled = !bool;
+			cmdbars(40).Visible = !bool;
+		}
+	}
+
+	function setMarkModify(bool) {
+		setReviewMode(bool);
+		enableReviewBar(!bool);
+	}
+
+	function showToolMenu(bool) {
+		document.all.item("riseOffice").IsShowToolMenu = bool;
+	}
+
+	function enableFileNewMenu(bool) {
+		document.all.item("riseOffice").EnableFileCommand(0) = bool;
+	}
+
+	function enableFileOpenMenu(bool) {
+		document.all.item("riseOffice").EnableFileCommand(1) = bool;
+	}
+
+	function enableFileCloseMenu(bool) {
+		document.all.item("riseOffice").EnableFileCommand(2) = bool;
+	}
+
+	function enableFileSaveMenu(bool) {
+		document.all.item("riseOffice").EnableFileCommand(3) = bool;
+	}
+
+	function enableFileSaveAsMenu(bool) {
+		document.all.item("riseOffice").EnableFileCommand(4) = bool;
+	}
+
+	function enableFilePrintMenu(bool) {
+		document.all.item("riseOffice").EnableFileCommand(5) = bool;
+	}
+
+	function enableFilePrintPreviewMenu(bool) {
+		document.all.item("riseOffice").EnableFileCommand(6) = bool;
+	}
+	function AddMyMenuItems() {
+		try {
+			var riseObj = document.all.item("riseOffice");
+			riseObj.AddCustomMenuItem('显示修订', false, false, 1);
+			riseObj.AddCustomMenuItem('隐藏修订', false, false, 2);
+			riseObj.AddCustomMenuItem('');
+		} catch (err) {
+			alert("不能创建新对象：" + err.number + ":" + err.description);
+		} finally {
+		}
+	}
+	function closeWindowDocument() {//退出编辑并解锁
+		var win = window.opener ? window.opener : window.parent;//windoe.open新窗口编辑用window.opener和iframe编辑 用window.parent
+		win.unlockDoc(1);
+		window.close();
+	}
+</script>
+</head>
+<body topmargin=0 leftmargin=0 rightmargin=0 bottommargin=0
+	marginwidth=0 marginheight=0 onbeforeunload='checkSaved()'>
+	<table width="100%" height="30"
+		style="font: Menu; background: ButtonFace; border-top: 1px solid #dbd8d1">
+		<tr>
+			<td>
+				<table border="0" cellpadding="0" cellspacing="0" width="100%"
+					bordercolordark="#B1AEA9" bgcolor="#D4D0C8" bordercolor="#D4D0C8"
+					bordercolorlight="#EEEEEE" style="border-bottom-style: groove">
+					<tr>
+						<td align="left" style="font: Menu;"><input type="hidden"
+							id="WordTitle" value="通用发文正文"
+							style="font: Menu; background-color: ButtonFace; border: none; width: 250px" />
+							<button class="op1" onclick="saveDocument(0);"><font color='red'>保存正文</font></button>
+							<button class="op1" onclick="openTaohong()">选择套红</button>
+							<!-- <button class="op1" onclick="undoTaohong();">撤销红头</button> -->
+							<button class="op1" onclick="riseOffice.ShowDialog(1);">公文导入</button>
+							<button class="op1" onclick="showRevisions(this);" id="visionController">显示痕迹</button>
+							<button class="op1" onclick="showToolbars(this);">显示工具栏</button>
+						</td>
+						<td align="right" style="font: Menu;">&nbsp;</td>
+						<td align="right" style="font: Menu;">
+							<button class="op1" onclick="closeWindowDocument();"
+								style="height: 40px; font-size: 18px">
+								<font color='red'>退出编辑并解锁</font>
+							</button> &nbsp;
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+
+	<object id=riseOffice
+		classid="clsid:01DFB4B4-0E07-4e3f-8B7A-98FD6BFF153E"
+		codeBase="../../../lib/ntkoOffice/ofctnewclsid.cab#version=5,0,2,6"
+		width="100%" height="100%">
+		<param name="BorderStyle" value="0">
+		<param name="BorderColor" value="14402205">
+		<param name="TitlebarColor" value="53668">
+		<param name="TitlebarTextColor" value="0">
+		<param name="MenubarColor" value="13160660">
+		<param name="Caption" value="欢迎使用！">
+		<param name="Titlebar" value="0">
+		<param name="MaxUploadSize" value="10000000">
+		<param name="CustomMenuCaption" value="辅助选项">
+		<param name="MakerCaption" value="北京有生博大软件技术有限公司">
+		<param name="MakerKey" value="7CAA90E9B33637E9A390DDD12B9149C3FBC57687">
+		<param name="ProductCaption" value="有生协同办公系统">
+		<param name="ProductKey" value="78380CB25E22DB886E7883E780435D901D936D8C">
+		<SPAN STYLE="color: red">不能装载文档控件。请在检查浏览器的选项中检查浏览器的安全设置。</SPAN>
+	</object>
+	<script>
+		function saveDocument(istaohong) {
+			var info;
+			var ntko = document.all.item("riseOffice");
+			var docType = ntko.DocType;
+			wordTitle = document.getElementById("WordTitle").value;
+			if (wordTitle == "") {
+				alert("正文标题不能为空！");
+				return;
+			}
+			try {
+				if (docType == 6) {//当前控件中的文档类型 6 = WPS Doc
+					return;
+				} else {
+					var instanceId = window.common.getQueryString("instanceId");
+					var contextPath = window.opener ? window.opener.window.top.contextPath : window.top.contextPath;
+					var params = "instanceId=" + instanceId;
+					info = ntko.SaveToURL(contextPath + window.portPath.saveOrUpdateDoc + "?" + params, "docFile", "", 'zhengwen.doc', 0);
+				}
+				//updateDocumentInfo(info);
+			} catch (e) {
+				alert('无法保存文件！');
+			}
+		}
+		 
+		function openTaohong() {//打开红头模板弹窗
+			var contextPath = window.opener ? window.opener.window.top.contextPath : window.top.contextPath;
+			var editUrl = contextPath + "/static/page/officialdoc/detail/taohong.html";
+			//var selectedTaohongId = window.showModalDialog(editUrl,JSON.stringify(params),'dialogHeight:450px;dialogWidth:700px;center:1');alert(rval);
+			window.open(editUrl, "套红模板", 'height=' + (window.screen.availHeight*0.6) + ',width=' + (window.screen.availWidth*0.6) +' ,top=248,left=400,status=no,toolbar=no,menubar=no,location=no,resizable=yes,scrollbars=0,titlebar=no'); 
+		}
+		function selectedTaohong(selectedTaohongId, selectedTaohongName){//选择红头模板进行套红
+			if (!selectedTaohongId) return;
+			var taohongTip = doTaohong(selectedTaohongId);
+			if (taohongTip == false) return;
+			getBookmarkData(selectedTaohongId, selectedTaohongName);
+			fillBookMarkData(selectedTaohongName);
+			saveDocument(1);
+		}
+		
+		function doTaohong(templateId) {//进行套红
+			try {
+				setMarkModify(false);
+				var BookMarkName = "RiseOffice_body";
+				var bkCount = document.all.item("riseOffice").ActiveDocument.BookMarks.Count;
+				var curSel = document.all.item("riseOffice").ActiveDocument.Application.Selection;
+				var saverange;
+				var bmObj;
+				if (bkCount != 0 && document.all.item("riseOffice").ActiveDocument.BookMarks.Exists(BookMarkName)) {
+					riseOffice.ShowTipMessage("提示信息", "当前模板已套红,请先撤销红头！", false);
+					return false;
+					bmObj = document.all.item("riseOffice").ActiveDocument.BookMarks(BookMarkName);
+					saverange = bmObj.Range;
+					saverange.Copy();
+					curSel.WholeStory();
+					curSel.Delete();
+				} else {
+					curSel.WholeStory();
+					curSel.Cut();
+				}
+				var contextPath = window.opener ? window.opener.window.top.contextPath : window.top.contextPath;
+				document.all.item("riseOffice").AddTemplateFromURL(contextPath + window.portPath.getTextTemplateContent + "?id="+templateId);
+				var ex = document.all.item("riseOffice").ActiveDocument.BookMarks.Exists("RiseOffice_bottom");
+				var num = 0;
+				if (ex) {
+					bmObj = document.all.item("riseOffice").ActiveDocument.BookMarks("RiseOffice_bottom");
+					num = bmObj.End - bmObj.Start + 1;
+				}
+				if (!document.all.item("riseOffice").ActiveDocument.BookMarks.Exists(BookMarkName)) {
+					alert("套红模板中不存在RiseOffice_body书签,请联系管理员。");
+				} else {
+					bmObj = document.all.item("riseOffice").ActiveDocument.BookMarks(BookMarkName);
+					saverange = bmObj.Range;
+					saverange.Paste();
+					document.all.item("riseOffice").ActiveDocument.Bookmarks.Add(BookMarkName, saverange);
+					if (ex) {
+						curSel.MoveLeft(1, num, 1);
+						document.all.item("riseOffice").ActiveDocument.Bookmarks.Add("RiseOffice_bottom", curSel.Range);
+					}
+				}
+				curSel.HomeKey(6, 0);
+				if (true) {
+					setMarkModify(true);
+				} else {
+					setMarkModify(false);
+				}
+				setFont();
+			} catch (err) {
+				if (true) {
+					setMarkModify(true);
+				} else {
+					setMarkModify(false);
+				}
+			}
+		}
+		
+		function getBookmarkData(templateId, templateName) {//通过模板id获取模板书签
+			try {
+				var contextPath = window.opener ? window.opener.window.top.contextPath : window.top.contextPath;
+				var url = contextPath + window.portPath.getTemplateBookmarkByTemplateId + "?templateID="+templateId;
+				var obj = document.all(templateName + "_MainXML");
+				if (obj != null) {
+					document.body.removeChild(obj);
+				}
+				var num = 0;
+				obj = document.all(templateName + "_DetailXML" + num);
+				while (obj != null) {
+					document.body.removeChild(obj);
+					num++;
+					obj = document.all(templateName + "_DetailXML" + num);
+				}
+				var XMLData = document.all.item("riseOffice").DoWebGet(url);
+				if (XMLData == null || XMLData == '' || XMLData == ' ') {
+					return;
+				}debugger
+				var island = (JSON.parse(XMLData)).data;
+				var size = island.length - 1;
+				if (size < 1) {
+					alert('获得书签数据出错，请联系管理员！');
+					return;
+				}
+				var str = "<XML>";
+				for (i = 0; i < size; i++) {
+					var temp = island[i].split("<Data>");
+					var elem = temp[0] + '</XML>';
+					var cont = '<Data>' + temp[1];
+					obj = document.createElement(elem);
+					document.body.appendChild(obj);
+					obj.XMLDocument.loadXML(cont);
+				}
+			} catch (e) {
+			}
+		}
+		function fillBookMarkData(templateName) {
+			try {
+				var riseOfficeObj = document.all.item("riseOffice").ActiveDocument;
+				var DXMLcount = 0;
+				var obj = document.all(templateName + "_MainXML");
+				if (obj != null) {
+					rs_bookmark = obj.recordset;
+					var count = rs_bookmark.Fields.Count;
+					if (count > 1) {
+						for (i = 0; i < count - 1; i++) {
+							var bkmkName = rs_bookmark.fields(i).name;
+							var bkmkValue = rs_bookmark.fields(i).value;
+							var bkmkObj = riseOfficeObj.BookMarks(bkmkName);
+							if (!bkmkObj) {
+								alert("模板中不存在名称为：bkmkName 的书签！");
+							} else {
+								var saverange = bkmkObj.Range;
+								saverange.Text = bkmkValue;
+								riseOfficeObj.Bookmarks.Add(bkmkName, saverange);
+							}
+						}
+					}
+				}
+				obj = document.all(templateName + "_DetailXML" + DXMLcount);
+				while (obj != null) {
+					rs_bookmark = obj.recordset;
+					rs_bookmark.moveFirst();
+					count = rs_bookmark.Fields.Count;
+					if (count > 0) {
+						var markname = rs_bookmark.Fields(0).name;
+						var point = markname.indexOf("__");
+						var markrange = markname.substring(2, point);
+						for (j = 0; j < rs_bookmark.recordcount; j++) {
+							riseOfficeObj.bookmarks("DT" + markrange).Range.Tables(1).rows(j + 2).Select();
+							riseOfficeObj.Application.Selection.InsertRowsBelow();
+							for (k = 0; k < count - 1; k++) {
+								markname = rs_bookmark.Fields(k).name;
+								markvalue = rs_bookmark.Fields(k).value;
+								riseOfficeObj.bookmarks("DT" + markrange).Range.bookmarks("DR" + markrange).Range.bookmarks(markname).Select();
+								ColumnIndex = riseOfficeObj.Application.Selection.Information(17);
+								riseOfficeObj.bookmarks("DT" + markrange).Range.Tables(1).rows(j + 3).cells(ColumnIndex).Select();
+								riseOfficeObj.Application.Selection.text = markvalue;
+							}
+							rs_bookmark.moveNext();
+						}
+						riseOfficeObj.bookmarks("DT" + markrange).Range.Tables(1).rows(2).Delete();
+						riseOfficeObj.Application.Selection.HomeKey(6, 0);
+					}
+					DXMLcount++;
+					obj = document.all(templateName + "_DetailXML" + DXMLcount);
+				}
+			} catch (e) {
+				alert(e);
+			}
+		}
+		function undoTaohong(){/* 撤销套红  */
+			var BookMarkName = "RiseOffice_body";
+		    if(!document.all.item("riseOffice").ActiveDocument.BookMarks.Exists(BookMarkName)) {
+		      riseOffice.ShowTipMessage("提示信息","没有发现套红模板或者模板中不存在RiseOffice_body书签！",false);
+		      return;
+		    }
+		    executeAction(3);  
+		}
+		
+		function executeAction(saveflag) {
+			try {
+				setMarkModify(false);
+				var BookMarkName = "RiseOffice_body";
+				var bmObj = document.all.item("riseOffice").ActiveDocument.BookMarks(BookMarkName);
+				var curSel = document.all.item("riseOffice").ActiveDocument.Application.Selection;//定义NTKO控件的Selection属性 
+				try {
+					document.all.item("riseOffice").ActiveDocument.Shapes(1).Select();
+					curSel.ShapeRange.Delete();
+				} catch (e) {
+				}
+				var saverange = bmObj.Range;
+				bmObj.Delete();
+				saverange.Copy();
+				curSel.WholeStory();
+				curSel.Delete();
+				curSel.HomeKey(6, 0);//光标定位到文件头
+				//document.all.item("riseOffice").AddTemplateFromURL("/riseoffice/OfficeTagDownloadServlet?templateGUID={BFA800D5-FFFF-FFFF-D6E6-FAD30000025C}");
+				saverange.Paste();
+				saveDocument(saveflag);
+				if (true) {
+					setMarkModify(true);
+				} else {
+					setMarkModify(false);
+				}
+			} catch (err) {
+				if (true) {
+					setMarkModify(true);
+				} else {
+					setMarkModify(false);
+				}
+			}
+		}
+		/* 初始化 */
+		function _init() {
+			var docId = window.common.getQueryString("docId");
+			if (docId) {
+				openDocument();
+			} else {
+				newDocument("newWord");
+			}
+			//AddMyMenuItems();
+		}
+		_init();
+	</script>
+</body>
+</html>

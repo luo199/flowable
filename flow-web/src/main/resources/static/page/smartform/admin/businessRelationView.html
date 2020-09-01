@@ -1,0 +1,78 @@
+<link rel="stylesheet" href="../../../lib/layer-3.1.1/theme/default/layer.css">
+<link rel="stylesheet" href="../../../lib/huasiPagination/huasi-pagination.min.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/common.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/original/index.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/iconfont/iconfont.css" />
+<div class="center-cover-container clear">
+	<div class="cover-content">
+		<div class="cover-aside h100 wrapper" id="businessRelationAsideContianer">
+			<div class="left-menu h100 bg0" id="leftMenuContianer">
+				<div class="left-menu-item">
+					<div class="menu-item menu-has-img clear menu-item-sel">
+						<a class="font-18 pointer" href="javascript:void(0)" onclick="changCenterPage('/static/page/smartform/admin/processSteps.html', 0)">流程说明</a>
+					</div>
+				</div>
+				<div class="left-menu-item">
+					<div class="menu-item menu-has-img clear">
+						<a class="font-18 pointer" href="javascript:void(0)" onclick="changCenterPage('/static/page/smartform/admin/tableNames.html', 1)">关联库表</a>
+					</div>
+				</div>
+				<div class="left-menu-item">
+					<div class="menu-item menu-has-img clear">
+						<a class="font-18 pointer" href="javascript:void(0)" onclick="changCenterPage('/static/page/smartform/admin/textTemplate.html', 2)">模板定义</a>
+					</div>
+				</div>
+				<div class="left-menu-item">
+					<div class="menu-item menu-has-img clear">
+						<a class="font-18 pointer" href="javascript:void(0)" onclick="changCenterPage('/static/page/smartform/admin/commentTemplate.html', 3)">意见模板定义</a>
+					</div>
+				</div>
+				<div class="left-menu-item">
+					<div class="menu-item menu-has-img clear">
+						<a class="font-18 pointer" href="javascript:void(0)" onclick="changCenterPage('/static/page/smartform/admin/formDefineList.html', 4)">表单定义</a>
+					</div>
+				</div>
+				<div class="left-menu-item">
+					<div class="menu-item menu-has-img clear">
+						<a class="font-18 pointer" href="javascript:void(0)" onclick="changCenterPage('/static/page/smartform/admin/buttonOperator.html', 5)">按钮配置</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="right-content wrapper fl bg0">
+			<iframe id="businessRelationContianer" class="h100 w100" src="">12313</iframe>
+		</div>
+		<p class="cover-remove" onclick="closeBusinessRelation()"><i class="iconfont icon-guanbi"></i></p>
+	</div>
+</div>
+<script type="text/javascript" src="../../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.form.js"></script>
+<script type="text/javascript" src="../../../lib/layer-3.1.1/layer.js"></script>
+<script type="text/javascript" src="../../../lib/art-template-4.13.2.min.js"></script>
+<script type="text/javascript" src="../../../lib/huasiPagination/huasiPagination.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/config.js"></script>
+<script>
+	$(function(){
+		window.common.getNiceScroll(".wrapper");
+		$("#rightContianer").hide();
+		$("#leftMenuContianer a").eq(0).trigger("click");
+	});
+	function changCenterPage(centerUrl, $index){//切换中间页面
+		var toUrl = window.top.contextPath + centerUrl;
+		var businessId = window.common.getQueryString("businessId");
+		$("#businessRelationContianer").attr("src", toUrl + "?businessId="+businessId);
+		setLeftMenuSelectedStyle($index);
+	}
+	function setLeftMenuSelectedStyle($index){//设置左侧菜单选中的样式
+		$index = $index || 0;
+		$("#businessRelationAsideContianer .menu-item-sel").removeClass("menu-item-sel");
+		$("#businessRelationAsideContianer .left-menu-item").eq($index).find(".menu-item").addClass("menu-item-sel");
+	}
+	function closeBusinessRelation(){
+		window.parent.document.getElementById("centerCoverContianer").style.display = 'none';
+		window.parent.document.getElementById("centerCoverContianer").setAttribute('src', '');
+	}
+</script>

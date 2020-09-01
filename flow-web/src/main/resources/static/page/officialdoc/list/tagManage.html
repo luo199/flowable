@@ -1,0 +1,66 @@
+<div id="tagListPage" class="h100 w100 bg0 pad-16">
+	<div id="tagListTitle" class="circle-title font-18 color333 t-a-c">
+		<span>标签管理</span>
+		<div class="fr pointer color999 hover-color">
+			<a class="hover-color" target="_blank" onclick="openTag(0)">返回</a>
+		</div>
+	</div>
+	<div id="tagListOps" class="w100 t-a-c" onclick="editTagInfo('add')">
+		<div class="circle-add">
+			<span class="font-16">新增标签</span>
+			<i class="iconfont icon-add"></i>
+		</div>
+	</div>
+	<div id="tagListMain" class="wrapper">
+	<table class="default-table w100">
+	<thead>
+		<tr>
+			<th width="60px">序号</th>
+			<th width="50%">名称</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody id="tagListContianer">
+	<script id="tagManageTemplate" type="text/html">
+	{{if listData.length > 0 }}
+		{{each listData as item index}}
+			<tr>
+				<td>{{item.tagNumber}}</td>
+				<td>{{item.tagName}}</td>
+				<td>
+					<a href="javascript:void(0);" onclick="editTagInfo('update', '{{item.tagId}}')"><i class="iconfont icon-edit font-18" title="修改"></i>&nbsp;<span class="">修改</span></a>
+					<a href="javascript:void(0);" onclick="removeByTagId('{{item.tagId}}')"><i class="iconfont icon-remove font-18" title="删除"></i>&nbsp;<span class="">删除</span></a>
+				</td>
+			</tr>
+		{{/each}}
+	{{else}}
+		<tr align="middle"><td colspan="3">暂时还没有相关文件</td></tr>
+	{{/if}}
+	</script>
+	</tbody>
+	</table>
+	</div>
+</div>
+<!-- 标签管理新增/编辑弹窗 -->
+<div id="tagInfoFormDialog">
+	<form id="tagInfoForm" class="default-form">
+		<div class="form-item clear">
+			<label class="form-label font-16">序号：</label>
+			<div class="hs-input">
+				<input required type="number" name="tagNumber" autocomplete="off" class="input-inner" maxlength="5" min="1" step="1">
+			</div>
+		</div>
+		<div class="form-item clear">
+			<label class="form-label font-16">名称：</label>
+			<div class="hs-input">
+				<input required type="text" name="tagName" autocomplete="off" class="input-inner" maxlength="5">
+			</div>
+		</div>
+		<div class="form-item-button">
+			<input class="hs-button button-default" onclick="closeTagInfoDialog()" value="取消" type="button" readonly/>
+	  		<input class="hs-button button-primary" value="确认" type="submit" readonly/>
+		</div>
+		<input type="hidden" name="tagId">
+	</form>
+</div>
+<script type="text/javascript" src="../../../js/officialdoc/list/tagManage.js"></script>

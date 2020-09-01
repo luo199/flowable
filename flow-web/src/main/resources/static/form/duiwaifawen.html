@@ -1,0 +1,27 @@
+<meta charset="UTF-8">
+<div class="form-container h100">
+<div class="detail-table1">
+<form id="HS_BUS_M_SENDINFO">
+	<!-- 基本信息 -->
+	<table cellpadding="0" cellspacing="0" border="0" width="665" class="base-table basic-form" id="basicFormTable">
+		<tbody>
+			<tr>
+				<td colspan="8">
+					<h1>文件基本信息表</h1><input class="ignore" type="hidden" name="formdeptname" /><!-- formdeptname需传给后台 -->
+					<input class="ignore" type="hidden" name="runningNumber" /><input class="ignore" type="hidden" value="平件" name="jinjichengdu" />
+				</td>
+			</tr>
+			<tr>
+				<td height="32" width="100" align="middle">发文字号</td>
+				<td align="left" colspan="7"><input class="right-has-button" type="text" name="fawenzihao" has-code="true"><input type="button" value="编号"  onclick="openNumberCardForm(this)"></td>
+			</tr>
+			<tr>
+				<td height="32" width="100" align="middle">文件标题<font style="color: red">*</font></td>
+				<td align="left" colspan="7"><textarea name="wenjianbiaoti" rows="4"></textarea></td>
+			</tr>
+		</tbody>
+	</table>
+</form>
+</div>
+</div>
+<script type="text/javascript" src="../../../js/officialdoc/detail/form.js"></script>

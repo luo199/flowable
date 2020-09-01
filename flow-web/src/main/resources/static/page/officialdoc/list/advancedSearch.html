@@ -1,0 +1,98 @@
+<form id="searchForm" class="advanced-search bg0 h100" >
+		<div class="circle-title font-18 color333 t-a-c">高级查询</div>
+		<div id="wrapper" class="advanced-search-main overflow">
+			<div id="searchId" class="font-18 pad-16 color666">
+				<div class="search-list-block">
+					<div class="search-list clear">
+						<label>标&#12288;&#12288;题：</label>
+						<div class="hs-input fr width-95">
+							<input class="w100 input-inner" type="text" id="title" value="" />
+						</div>
+					</div>
+					<div class="search-list clear">
+						<label>来文单位：</label>
+						<div class="hs-input fr width-95">
+							<input class="w100 input-inner" type="text" id="laiwendanwei"value="" />
+						</div>
+					</div>
+					<div class="search-list clear">
+						<label>处理意见：</label>
+						<div class="hs-input fr width-95">
+							<input class="w100 input-inner" type="text" id="chuliyijian" value=""/>
+						</div>
+					</div>
+					<div class="search-list clear" id="zongHeSearch">
+						<label>拟 稿 人 ：</label>
+						<div class="hs-input fr width-95">
+							<input class="w100 input-inner" type="text" id="createPerson" value=""/>
+						</div>
+					</div>
+				</div>
+				<div class="search-list-block">
+					<div class="search-list clear">
+						<label>办文编号：</label>
+						<div class="hs-input fr width-95">
+							<input class="w100 input-inner" type="text" id="banwenbianhao" value=""/>
+						</div>
+					</div>
+					<div class="search-list clear">
+						<label>来文字号：</label>
+						<div class="hs-input fr width-95">
+							<input class="w100 input-inner" type="text" id="laiwenzihao" value=""/>
+						</div>
+					</div>
+					<div class="search-list clear">
+						<label>经 办 人：</label>
+						<div class="hs-input fr width-95">
+							<input class="w100 input-inner" type="text" id="jinbanren" value=""/>
+						</div>
+					</div>
+					<div class="search-list clear">
+						<label>签 批 人：</label>
+						<div class="hs-input fr width-95">
+							<input class="w100 input-inner" type="text" id="signPerson" value=""/>
+						</div>
+					</div>
+					<div class="search-list clear" id="exportTypelist">
+						<label>列表类型：</label>
+						<div class="fr width-95">
+							<select id="exportType" name="exportType" class="w100" style="width:120px;">
+								<option value="">请选择</option>
+								<option value="1">签收列表</option>
+								<option value="2">发出列表</option>
+							</select>
+						</div>
+					</div>
+					<div class="search-list clear">
+						<span>收文日期：</span>
+						<div class="fr width-95 table">
+							<div class="pointer" onclick="initDefaultDate(this, '1','M')">一月内</div>
+							<div class="pointer" onclick="initDefaultDate(this, '3','M')">三个月内</div>
+							<div class="pointer" onclick="initDefaultDate(this, '6','M')">半年内</div>
+							<div class="pointer" onclick="initDefaultDate(this, '1','y')">一年内</div>
+						</div>
+					</div>
+					<div class="search-list clear">
+						<label>时&#12288;&#12288;间：</label>
+						<div class="hs-input fr width-95 two-column">
+							<input class="Wdate pointer input-inner" value="" readonly id="beginDate" placeholder="请选择日期" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'endDate\')}'})" /> 
+    							-
+    						<input class="Wdate pointer input-inner" value="" readonly id="endDate" placeholder="请选择日期"onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'beginDate\')}'})"/> 
+						</div>								
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="bottom-action bg0">
+		<div class="t-a-c theme-color" onclick="searchOption()">
+			<input class="font-18 theme-color t-a-c bg- pointer"
+				type="button" value="查找" />
+		</div>
+		<div class="t-a-c" onclick="searchReset()">
+			<input class="font-18 t-a-c bg0 pointer" type="button" value="重置" />
+		</div>
+	</div>
+</form>

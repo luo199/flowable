@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			html,body{height: 100%;width: 100%;margin: 0;padding: 0;}
+		</style>
+	</head>
+	 <script type='text/javascript'>
+	var json='[]';
+	</script>
+	<script language='JavaScript'>
+		var webContextPath = window.top.contextPath;
+		isArchManager = "true";
+	</script>
+	<link type='text/css' rel='stylesheet' href='../../../lib/risefile/css/filebox.css'>
+	<script language='javascript' src='../../../lib/jquery/jquery-2.2.4.js'></script>
+	<script language='javascript' src='../../../js/common.js'></script>
+	<script language='javascript' src='../../../js/config.js'></script>
+	<script language='javascript' src='../../../lib/risefile/js/fileBox.js'></script>
+	<body>
+		<div id='repository_fujianDIV' class="filebox"></div>
+		<script language='JavaScript'>
+			var attType = window.common.getQueryString('attType');
+			var instanceInfo = JSON.parse(localStorage.getItem("formInstanceInfo"));
+		  	var searchParams = {};
+		  	searchParams.instanceId = window.common.getQueryString('instanceId');
+		  	searchParams.attachementType = 1;
+			var repository_fujianObject=new Object();
+		  	repository_fujianObject.FILEBOXNAME='repository_fujian';
+		  	repository_fujianObject.APPNAME='repository';
+		  	repository_fujianObject.FILEROOT='fujian';
+		  	repository_fujianObject.SAVEMODE='true';
+		  	repository_fujianObject.KEEPMINIMALVERSION='true';
+		  	repository_fujianObject.FILTERS='';
+		 	repository_fujianObject.ISFILTEREXTENDS='true';
+		 	repository_fujianObject.STREAMHANDLES='';
+		  	repository_fujianObject.ISHANDLEEXTENDS='true';
+		  	repository_fujianObject.APPINSTGUID=searchParams.instanceId;
+		  	repository_fujianObject.MAJORVERSION='6';
+		  	repository_fujianObject.MAJORVERSIONNAME='6';
+		  	repository_fujianObject.CONTEXT='';//'<fcKey>appInstanceGUID<fcValue>{0A000015-0000-0000-1BAA-5578FFFFFF99}<fcKey>majorVersion<fcValue>6<fcKey>fileboxName<fcValue>repository_fujian';
+		  	repository_fujianObject.WIDTH=333;
+		  	repository_fujianObject.HEIGHT=200;
+		  	repository_fujianObject.MAXUPLOADSIZE=1000 * 1024 * 1024 + "";//1048576000;
+		  	//repository_fujianObject.VIEWTYPE = (attType == 'attachment') ? 1 : 2;
+		  	repository_fujianObject.ALLVERSION = false;
+		  	repository_fujianObject.SELECTCOUNT=0;
+		  	repository_fujianObject.ISPERMITADDDELFILES=-1;
+		  	var winfj = null;
+		  	var employer=window.top.userName;
+		  	
+		  	initFileBox(repository_fujianObject, searchParams);
+		  	showVersion("repository_fujian", searchParams);
+		</script>
+		<script language='JScript' for='repository_fujian' event='OnLocalFileAdded(path,name ,AttachFile)'>
+			addRiseFile(this, searchParams);
+		</script>
+		<script language='JScript' for='repository_fujian' event='BeforeFileCommand(cmdType,IsServerFile,FilePathOrURL ,AttachFile)'>
+			doFileCommand(cmdType,IsServerFile,FilePathOrURL,AttachFile,this);
+			if((cmdType==0||cmdType==1)&&isArchManager == 'true'){
+				var name=AttachFile.FileName; 
+				var nameSubstr = name.substr(name.lastIndexOf(".")+1)
+				if(nameSubstr.toLowerCase()=="doc"||nameSubstr.toLowerCase()=="docx"||nameSubstr.toLowerCase()=="pptx"||nameSubstr.toLowerCase()=="ppt"||nameSubstr.toLowerCase()=="xlsx"||nameSubstr.toLowerCase()=="xls"){
+					var id=AttachFile.CustomFileID;//附件id
+					var instanceId=AttachFile.GetCustomData(4); //实例id
+					var primaryId=AttachFile.GetCustomData(0); //primaryId
+					var	Attach_OCX_OBJ=document.getElementById("repository_fujian");
+					var isOpenOffice = true;
+					parent.officeEdit(id, instanceId, function(data){
+						if(data && data.LOCK ==1 ){
+							isOpenOffice = false;//不打开
+						}else{
+							//进行提示：
+							if (!confirm("文件进入编辑锁定状态，其他人员无法修改此文件，请修改完成后及时保存并退出")) {
+							   parent.closefjLock(id, instanceId);
+							   isOpenOffice = false;//不打开
+			                }
+						}
+						if(winfj==null && isOpenOffice){
+							winfj =	window.open(webContextPath + "/static/page/officialdoc/detail/office.html?nameSubstr="+nameSubstr+"&fileName="+escape(name)+"&fileGUID="+id+"&appname=repository&primaryId="+primaryId+"&instanceId="+instanceId+"&attachementType=1",'newwindow','height='+screen.availHeight+', width='+screen.availWidth+',toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=yes, status=no');
+						} else if(isOpenOffice){
+			 				winfj.close();
+			 				winfj =	window.open(webContextPath + "/static/page/officialdoc/detail/office.html?nameSubstr="+nameSubstr+"&fileName="+escape(name)+"&fileGUID="+id+"&appname=repository&primaryId="+primaryId+"&instanceId="+instanceId+"&attachementType=1",'newwindow','height='+screen.availHeight+', width='+screen.availWidth+',toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=yes, status=no');
+						}
+					});
+					Attach_OCX_OBJ.CancelLastCommand = true;
+				}
+			}
+		</script>
+		<script language='JScript' for='repository_fujian' event='AfterSaveToURL(retStr,ErrCode)'>
+			var res = "repository_fujian;" + retStr;
+			afterCommitFileBox(res,ErrCode);
+		</script>
+	</body>
+</html>

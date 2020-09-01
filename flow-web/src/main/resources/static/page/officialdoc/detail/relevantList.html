@@ -1,0 +1,18 @@
+<div id="related">
+	<script id="relavantTemplate" type="text/html">
+		    <div class="relavant-box">
+		             {{if listData.length>0}}
+								{{each listData as obj index}}
+										<div class="reply-list" style="margin-bottom:10px;">
+                                            <span class="font-16 color5b lineblock padl-16 ver-algn-top">{{ index+1 }}.</span>
+					                        <span class="font-16 color5b max-width-100 elips lineblock ver-algn-top" title="标题">{{ obj.title }}</span>
+				                         	<span class="color999 font-16  pointer padl-16 hover-color lineblock ver-algn-top">{{ obj.bureauName }}</span>
+					                        <span class="color999 font-16 fr pointer padl-16 hover-color  iconfont icon-remove lineblock ver-algn-top" onclick="delRelated('{{obj.relatedId}}')"></span>
+					                 </div>
+							 	{{/each}}
+	
+					 {{/if}} 
+                 </div>
+       </script>
+</div>
+<script type="text/javascript" src="../../../js/officialdoc/detail/relevantList.js"></script>

@@ -1,0 +1,51 @@
+<link rel="stylesheet" href="../../../lib/layer-3.1.1/theme/default/layer.css">
+<link rel="stylesheet" href="../../../lib/huasiPagination/huasi-pagination.min.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/common.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/original/index.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/iconfont/iconfont.css" />
+<div class="w100 wrapper fl bg0">
+	<div align="center" style="padding-top: 50px">
+		<label  class="font-16" id="processName"></label>
+	</div>
+	<div align="center" id="processImage" style="padding-top: 100px">
+	</div>
+</div>
+<script type="text/javascript" src="../../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.form.js"></script>
+<script type="text/javascript" src="../../../lib/layer-3.1.1/layer.js"></script>
+<script type="text/javascript" src="../../../lib/art-template-4.13.2.min.js"></script>
+<script type="text/javascript" src="../../../lib/huasiPagination/huasiPagination.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/config.js"></script>
+<script>
+    $(function(){
+        window.common.getNiceScroll(".wrapper");
+        var code = window.common.getQueryString("code");
+		//alert(code);
+        getProcessIdByCode(code);
+    });
+    
+    function getProcessIdByCode(code) {
+        var _url = window.top.contextPath + window.portPath.findBusinessBaseByCode+"?code="+code;
+        window.common.networkConnect(_url, "GET", window.conType.conTyJson, null, function(res) {
+            if (res.exchangeStatus == 1) {
+                $("#processName").text(res.data.processName);
+                showProcessImage(res.data.processId);
+            }
+        });
+		
+    }
+	
+    function showProcessImage(processId) {
+        var _url = window.top.contextPath + window.portPath.processManageImage+"?processDefinitionId="+processId;
+        window.common.networkConnect(_url, "GET", null, null, function(res) {
+            if (res.exchangeStatus==1) {
+				$("#processImage").html( '<img src="data:image/png;;base64,'+res.data.image+'"/>')
+            }else{
+                layer.msg("获取流程图失败",{icon: 2})
+            }
+        });
+    }
+</script>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huasisoft.flow.business.mapper.BusinessBaseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.huasisoft.flow.business.entity.BusinessBase">
+        <result column="CODE" property="code" />
+        <result column="NAME" property="name" />
+        <result column="REMARK" property="remark" />
+        <result column="CATA_CODE" property="cataCode" />
+        <result column="CREATOR_ID" property="creatorId" />
+        <result column="CREATOR_NAME" property="creatorName" />
+        <result column="CREATR_TIME" property="creatrTime" />
+        <result column="STATUS" property="status" />
+        <result column="PROCESS_ID" property="processId" />
+    </resultMap>
+
+    <select id="page" resultMap = "BaseResultMap">
+        select * from ${dbSchema}FLOW_BUSINESS_BASE f
+
+         where f.status='0'
+        <if test="cataCode!=null and cataCode!=''" >
+            <bind name="pattern" value="cataCode" />
+            and f.CATA_CODE = #{pattern}
+        </if>
+        <if test="name!=null and name!=''">
+            <bind name="pattern" value="'%' + name + '%'" />
+            and f.name like #{pattern}
+        </if>
+         order by f.CREATR_TIME desc
+    </select>
+
+
+</mapper>

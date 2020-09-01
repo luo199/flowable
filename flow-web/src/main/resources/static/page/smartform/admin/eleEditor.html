@@ -1,0 +1,61 @@
+<div class="form-element-container" id="elesContainer">
+	<div class="h100 w100 bg0">
+		<div class="form-element-top">
+			<div id="topElesBtn" class="top-operations clear top-operations-diff">
+				<div class="operation-item pointer" onclick="showEditFormElement()">
+					<i class="iconfont icon-edit"></i>
+					<span class="font-16">修改</span>
+				</div>
+				<div id="eleEditorRemoveBtn" class="operation-item pointer" onclick="removeFormElementById()">
+					<i class="iconfont icon-remove"></i>
+					<span class="font-16">删除</span>
+				</div>
+			</div>
+			<div class="w100 pad-16 wrapper" id="bottomElesTable">
+				<input id="selectedFormElement" value="" type="hidden"/>
+				<table class="w100 default-table default-table-fixed">
+					<thead>
+						<tr>
+							<th>序号</th>
+							<th width="">字段名</th>
+							<th>字段中文名</th>
+							<th>字段类别</th>
+							<th>元素名</th>
+							<th>元素类型</th>
+							<th>表名</th>
+						</tr>
+					</thead>
+					<tbody id="formElementTb" class="color666 font-16">
+						 <script id="formElementTbTemplate" type="text/html">
+					    {{if list.length>0}}
+							{{each list as value index}}
+								{{set obj = list[index]}}
+								{{if(obj.businessId && obj.formId)}}<tr class="bg1">{{else}}<tr>{{/if}}
+									<td>
+										<label for="eleColId{{index}}" class="hs-checkbox">
+											<input name="checkboxFormElement" id="eleColId{{index}}" value="" onclick="updateFormElementsSelection(this, '{{obj}}')" type="radio" class="checkbox-original">
+											<span class="checkbox-input">
+								    			<span class="checkbox-inner"></span>
+											</span>
+											<span class="checkbox-label">{{index+1}}</span>
+						    			</label>
+									</td>
+									<td>{{obj.colEgName}}</td>
+									<td>{{obj.colChName}}</td>
+									<td>{{obj.colType}}</td>
+									<td>{{obj.eleEgName}}</td>
+									<td>{{obj.eleType}}</td>
+									<td>{{obj.eleColTable}}</td>
+								</tr>
+							 {{/each}}
+						{{else}}
+							<tr><td colspan="8" align="center">暂无数据</td></tr>
+						{{/if}}  
+				</script>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="../../../js/smartform/admin/eleEditor.js"></script>

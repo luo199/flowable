@@ -1,0 +1,152 @@
+<link rel="stylesheet" href="../../../lib/layer-3.1.1/theme/default/layer.css">
+<link rel="stylesheet" href="../../../lib/huasiPagination/huasi-pagination.min.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/common.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/original/index.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/iconfont/iconfont.css" />
+<div id="formDefineContainer" class="h100 w100">
+	<div class="top-operations clear top-operations-diff">
+		<div class="operation-item pointer" onclick="showFormEditDialog('add')">
+			<i class="iconfont icon-sqr-add"></i>
+			<span class="font-16">新增</span>
+		</div>
+		<div class="operation-item pointer" onclick="showFormEditDialog('update')">
+			<i class="iconfont icon-edit"></i>
+			<span class="font-16">修改</span>
+		</div>
+		<div class="operation-item pointer" onclick="removeFormDefineById()">
+			<i class="iconfont icon-remove"></i>
+			<span class="font-16">删除</span>
+		</div>
+		<div class="operation-item pointer" onclick="relatedFormDefineById()">
+			<i class="iconfont icon-link"></i>
+			<span class="font-16">关联意见框</span>
+		</div>
+		<div class="operation-item pointer" onclick="openElementValidForm()">
+			<i class="iconfont icon-link"></i>
+			<span class="font-16">字段验证配置</span>
+		</div>
+		<div class="top-operations-right fr">
+			<form id="queryFormDefineForm" class="default-form lineblock">
+				<input type="hidden" id="formDefinePage" name="page" type="text" />
+				<input type="hidden" name="rows" type="text" value="10"/>
+				<input type="hidden" name="businessId">
+				<div class="form-item clear lineblock">
+					<label class="form-label font-16">表单英文名称：</label>
+					<div class="hs-input">
+						<input type="text" name="formEgName" autocomplete="off" class="input-inner" maxlength="50">
+					</div>
+				</div>
+				<div class="form-item-button lineblock">
+			  		<input class="hs-button button-primary" id="formDefineSubmitButton" value="确认" type="submit" readonly/>
+			  		<input class="hs-button button-primary" value="重置"  type="reset" readonly/>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="bottom-content cover-bottom-content">
+		<div id="wrapper" class="h100 w100 bg0">
+			<div class="w100 pad-16" id="listDatas">
+				<input id="selectedFormDefine" value="" type="hidden"/>
+				<table class="default-table w100">
+					<thead>
+						<tr class="t-a-l color333 font-18">
+							<th width="10%"> 序号</th>
+							<th width="15%">表单英文名称</th>
+							<th width="15%">表单中文名称</th>
+							<th width="10%">表单类型</th>
+							<th width="20%">表单地址</th>
+							<th width="15%">创建开始日期</th>
+						</tr>
+					</thead>
+					<tbody id="formDefineTb" class="color666 font-16">
+						 <script id="formDefineTemplate" type="text/html">
+							{{if listData.list.length>0}}
+								{{each listData.list as obj index}}
+									<tr>
+										<td>
+											<label for="{{obj.formId}}" class="hs-checkbox">
+												<input name="checkboxForm" id="{{obj.formId}}" value="" onclick="updateFormSelection(this,'{{obj.formId}}')" type="radio" class="checkbox-original">
+												<span class="checkbox-input">
+								    				<span class="checkbox-inner"></span>
+												</span>
+												<span class="checkbox-label">{{listData.currentPage*listData.size+index+1}}</span>
+						    				</label>
+										</td>
+										<td><a href="javascript:void(0);" onclick="openFormDetails('{{obj.formId}}')">{{obj.formEgName}}</a></td>	
+										<td>{{obj.formChName}}</td>
+										<td>{{if obj.formType == 1}}主表{{else if obj.formType == 2}}细表{{else if obj.formType == 3}}混合表{{/if}}</td>
+										<td>{{obj.formUrl}}</td>
+										<td>{{obj.createDateTime | dateFormat 'yyyy-MM-dd hh:mm:ss'}}</td>
+									</tr>
+							 	{{/each}}
+							 {{else}}
+								<tr><td colspan="7" align="center">暂无数据</td></tr>
+							 {{/if}}  
+						 </script>
+					</tbody>
+				</table>
+			</div>
+			<div class="paging clear padr-16"><!--分页 -->
+				<div id="huasiPagination"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 表单定义弹窗 -->
+<div id="formDefineFormDialog">
+	<form id="formDefineForm" class="default-form">
+		<div class="form-item clear">
+			<label class="form-label font-16">表单英文名称：</label>
+			<div class="hs-input">
+				<input required type="text" name="formEgName" autocomplete="off" class="input-inner" maxlength="50">
+			</div>
+		</div>
+		<div class="form-item clear">
+			<label class="form-label font-16">表单中文名称：</label>
+			<div class="hs-input">
+				<input required type="text" name="formChName" autocomplete="off" class="input-inner" maxlength="50">
+			</div>
+		</div>
+		<div class="form-item clear">
+			<label class="form-label font-16">表单类型：</label>
+			<div class="hs-input hs-input-select relative">
+				<div class="more-box"></div>
+				<select class="hs-input input-inner" name="formType">
+					<option value=1>主表</option>
+					<option value=2>细表</option>
+					<option value=3>混合表</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-item clear">
+			<label class="form-label font-16">表单Url：</label>
+			<div class="hs-input">
+				<input type="text" name="formUrl" autocomplete="off" class="input-inner" maxlength="100">
+			</div>
+		</div>
+		<div class="form-item-button">
+			<input class="hs-button button-default" onclick="closeEditFormDialog()" value="取消" type="button" readonly/>
+	  		<input class="hs-button button-primary" value="确认" type="submit" readonly/>
+		</div>
+		<input type="hidden" name="businessId">
+		<input type="hidden" name="formId">
+		<input type="hidden" name="version">
+	</form>
+</div>
+<div id="relatedDialog"> <!--关联文件框  -->
+	<div class="related-list"></div>
+	<div class="save-relateddialog-btn">
+	<div class="hs-button button-default" onclick="closeRelatedDialog()">取消</div>
+	<div class="hs-button button-primary" onclick="toRelatedFile()">保存</div>
+	</div>
+</div>
+<script type="text/javascript" src="../../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../../../lib/layer-3.1.1/layer.js"></script>
+<script type="text/javascript" src="../../../lib/art-template-4.13.2.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.form.js"></script>
+<script type="text/javascript" src="../../../lib/huasiPagination/huasiPagination.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/config.js"></script>
+<script type="text/javascript" src="../../../js/smartform/admin/formDefineList.js"></script>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			html,body{height: 100%;width: 100%;margin: 0;padding: 0;}
+		</style>
+	</head>
+	 <script type='text/javascript'>
+	var json='[]';
+	</script>
+	<script language='JavaScript'>
+		var webContextPath = window.top.contextPath;
+		isArchManager = "true";
+	</script>
+	<link type='text/css' rel='stylesheet' href='../../../lib/risefile/css/filebox.css'>
+	<script language='javascript' src='../../../lib/jquery/jquery-2.2.4.js'></script>
+	<script language='javascript' src='../../../js/common.js'></script>
+	<script language='javascript' src='../../../js/config.js'></script>
+	<script language='javascript' src='../../../lib/risefile/js/fileBox.js'></script>
+	<body>
+		<div id='repository_beijingDIV' class="filebox"></div>
+		<script language='JavaScript'>
+			var attType = window.common.getQueryString('attType');
+			var searchParams = {};
+		  	searchParams.instanceId = window.common.getQueryString('instanceId');
+		  	searchParams.attachementType = 2;
+			var repository_beijingObject=new Object();
+		  	repository_beijingObject.FILEBOXNAME='repository_beijing';
+		  	repository_beijingObject.APPNAME='wenjianbeijing';
+		  	repository_beijingObject.FILEROOT='beijing';
+		  	repository_beijingObject.SAVEMODE='true';
+		  	repository_beijingObject.KEEPMINIMALVERSION='true';
+		  	repository_beijingObject.FILTERS='';
+		 	repository_beijingObject.ISFILTEREXTENDS='true';
+		 	repository_beijingObject.STREAMHANDLES='';
+		  	repository_beijingObject.ISHANDLEEXTENDS='true';
+		  	repository_beijingObject.APPINSTGUID=searchParams.instanceId;
+		  	repository_beijingObject.MAJORVERSION='6';
+		  	repository_beijingObject.MAJORVERSIONNAME='6';
+		  	repository_beijingObject.CONTEXT='';//'<fcKey>appInstanceGUID<fcValue>{0A000015-0000-0000-1BAA-5578FFFFFF99}<fcKey>majorVersion<fcValue>6<fcKey>fileboxName<fcValue>repository_beijing';
+		  	repository_beijingObject.WIDTH=333;
+		  	repository_beijingObject.HEIGHT=200;
+		  	repository_beijingObject.MAXUPLOADSIZE=1000 * 1024 * 1024 + "";//1048576000;
+		  	//repository_beijingObject.VIEWTYPE = (attType == 'attachment') ? 1 : 2;
+		  	repository_beijingObject.ALLVERSION = false;
+		  	repository_beijingObject.SELECTCOUNT=0;
+		  	repository_beijingObject.ISPERMITADDDELFILES=-1;
+		  	var winfj = null;
+		  	var employer=window.top.userName;
+		  	
+		  	initFileBox(repository_beijingObject, searchParams);
+		  	showVersion("repository_beijing", searchParams);
+		</script>
+		<script language='JScript' for='repository_beijing' event='OnLocalFileAdded(path,name ,AttachFile)'>
+			addRiseFile(this, searchParams);
+		</script>
+		<script language='JScript' for='repository_beijing' event='BeforeFileCommand(cmdType,IsServerFile,FilePathOrURL ,AttachFile)'>
+			doFileCommand(cmdType,IsServerFile,FilePathOrURL,AttachFile,this);
+			if((cmdType==0||cmdType==1)&&isArchManager == 'true'){		
+				var name=AttachFile.FileName; 
+				var nameSubstr = name.substr(name.lastIndexOf(".")+1)
+				if(nameSubstr.toLowerCase()=="doc"||nameSubstr.toLowerCase()=="docx"||nameSubstr.toLowerCase()=="pptx"||nameSubstr.toLowerCase()=="ppt"||nameSubstr.toLowerCase()=="xlsx"||nameSubstr.toLowerCase()=="xls"){
+					var id=AttachFile.CustomFileID;//附件id
+					var instanceId=AttachFile.GetCustomData(4); //实例id
+					var primaryId=AttachFile.GetCustomData(0); //primaryId
+					var	Attach_OCX_OBJ=document.getElementById("repository_beijing");
+					var isOpenOffice = true;//officeEdit(id);
+					parent.officeEdit(id, instanceId, function(data){
+						if(data && data.LOCK ==1 ){
+							isOpenOffice = false;//不打开
+						}else{
+							//进行提示：
+							if (!confirm("文件进入编辑锁定状态，其他人员无法修改此文件，请修改完成后及时保存并退出")) {
+							   parent.closefjLock(id, instanceId);
+							   isOpenOffice = false;//不打开
+			                }
+						}
+						if(winfj==null && isOpenOffice){
+							winfj =	window.open(webContextPath + "/static/page/officialdoc/detail/office.html?nameSubstr="+nameSubstr+"&fileName="+name+"&fileGUID="+id+"&appname=wenjianbeijing&primaryId="+primaryId,'newwindow','height='+screen.availHeight+', width='+screen.availWidth+',toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
+						} else if(isOpenOffice){
+			 				winfj.close();
+			 				winfj =	window.open(webContextPath + "/static/page/officialdoc/detail/office.html?nameSubstr="+nameSubstr+"&fileGUID="+id+"&appname=wenjianbeijing&primaryId="+primaryId,'newwindow','height='+screen.availHeight+', width='+screen.availWidth+',toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
+			 			}	
+					});
+					Attach_OCX_OBJ.CancelLastCommand = true;
+				}
+			}
+		</script>
+		<script language='JScript' for='repository_beijing' event='AfterSaveToURL(retStr,ErrCode)'>
+			var res = "repository_beijing;" + retStr;
+			afterCommitFileBox(res,ErrCode);
+		</script>
+	</body>
+</html>

@@ -1,0 +1,33 @@
+<link rel="stylesheet" type="text/css" href="../css/common.css" />
+<link rel="stylesheet" type="text/css" href="../css/original/index.css" />
+<link rel="stylesheet" type="text/css" href="../css/iconfont/iconfont.css" />
+<div class="header-contianer clear">
+	<div class="header-logo"><img id="logo" src=""/></div>
+	<div class="header-menu" id="headerNavContianer">
+		<script id="headerNavTemplate" type="text/html">
+			{{each list as item index}}
+				<div class="menu-item pointer">
+					<a target="_self" href="javascript.void(0);" onclick="javascript:parent.location.href='{{item.resourceUrl}}'">{{item.name}}</a>
+				</div>
+			{{/each}}
+		</script>
+	</div>
+	<div class="header-right fr pointer" onclick="headToggle()">
+		<div class="lineblock">
+             <img id="userPhotoImg" width="32px" border="0" alt="头像">
+         </div>
+		 <div class="lineblock">
+             <div class="lineblock font-18" id="userName"></div>
+         </div>
+         <div class="lineblock">
+             <i class="iconfont icon-xiala"></i>
+         </div>
+         <div class="icon-skin"><img src="../img/original/icon-skin.png"></div>
+	</div>
+</div>
+<script type="text/javascript" src="../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../lib/jquery/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="../lib/art-template-4.13.2.min.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/config.js"></script>
+<script type="text/javascript" src="../js/header.js"></script>

@@ -1,0 +1,22 @@
+<div class="h100 w100 bg0 pad-16">
+	<div class="circle-title font-18 color333 t-a-c">
+		<span>我的标签</span>
+		<div class="fr pointer color999 hover-color">
+			<a class="hover-color" target="_blank" onclick="openTag(1)">标签管理</a>
+			<i class="iconfont icon-setting"></i></div>
+		</div>
+	<div class="circle-content clear w100 wrapper" id="tagListContianer">
+	<script id="tagListTemplate" type="text/html">
+	{{if listData.length > 0 }}
+		{{each listData as item index}}
+		<div class="label-list elips pointer label-list-sel">
+			<div class="label-content">{{item.tagName}}</div>
+		</div>
+		{{/each}}
+	{{else}}
+		<div class="nodata t-a-c"><img width="128px" class="padb-16" alt="走丢了。。。" src="../../../img/original/noData.png"><p class="font-18 color666">暂时还没有相关文件</p></div>
+	{{/if}}
+	</script>
+	</div>
+</div>
+<script type="text/javascript" src="../../../js/officialdoc/list/tagManage.js"></script>

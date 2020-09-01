@@ -1,0 +1,124 @@
+<link rel="stylesheet" href="../../../lib/layer-3.1.1/theme/default/layer.css">
+<link rel="stylesheet" href="../../../lib/huasiPagination/huasi-pagination.min.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/common.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/original/index.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/iconfont/iconfont.css" />
+<div class="clear">
+
+
+	<div class="cover-content">
+		<div class="wrapper fl bg0">
+			<div id="textTemplateContainer" class="w100" style="padding:0;margin:0;">
+				<div class="top-operations clear top-operations-diff">
+					<div class="operation-item pointer" onclick="showCatalogEditDialog('add')">
+						<i class="iconfont icon-sqr-add"></i>
+						<span class="font-16">新增</span>
+					</div>
+					<div class="operation-item pointer" onclick="showCatalogEditDialog('update')">
+						<i class="iconfont icon-edit"></i>
+						<span class="font-16">修改</span>
+					</div>
+					<div class="operation-item pointer" onclick="removeCataLogByCode()">
+						<i class="iconfont icon-remove"></i>
+						<span class="font-16">删除</span>
+					</div>
+					<div class="top-operations-right fr">
+						<form id="queryCatalogListForm" class="default-form lineblock">
+							<input type="hidden" id="catalogPage" name="current"/>
+							<input type="hidden" name="size" value="10"/>
+							<div class="form-item-button lineblock" style="display: none">
+								<input class="hs-button button-primary" id="catalogSubmitButton" value="确认" type="submit" readonly/>
+								<input class="hs-button button-primary" value="重置"  type="reset" readonly/>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="bottom-content cover-bottom-content" style="padding:0;;margin:0;">
+					<div id="wrapper" class="h100 w100 bg0">
+						<div class="w100 pad-16" id="listDatas">
+							<input id="selectedCataLogCode" type="hidden"/>
+							<input id="selectedCataLogName" type="hidden"/>
+							<table class="default-table w100">
+								<thead>
+								<tr class="t-a-l color333 font-18">
+									<th width="10%"> 序号</th>
+									<th width="20%">分类编码</th>
+									<th width="25%">分类名称</th>
+									<th width="20%">创建人</th>
+									<th width="25%">创建日期</th>
+								</tr>
+								</thead>
+								<tbody id="catalogListTb" class="color666 font-16">
+								<script id="catalogList" type="text/html">
+									{{if catalogData.records.length>0}}
+									{{each catalogData.records as value index}}
+									{{set obj = catalogData.records[index]}}
+									<tr>
+										<td>
+											<label for="{{obj.code}}" class="hs-checkbox">
+												<input name="checkboxTemplate" id="{{obj.code}}" value="" onclick="updateTemplateSelection(this,'{{obj.code}}','{{obj.name}}')" type="radio" class="checkbox-original">
+												<span class="checkbox-input">
+								    				<span class="checkbox-inner"></span>
+												</span>
+												<span class="checkbox-label">{{index+1}}</span>
+											</label>
+										</td>
+										<td>{{obj.code}}</td>
+										<td>{{obj.name}}</td>
+										<td>{{obj.creatorName}}</td>
+										<td>{{obj.creatrTime | dateFormat 'yyyy-MM-dd hh:mm:ss'}}</td>
+									</tr>
+									{{/each}}
+									{{else}}
+									<tr><td colspan="6" align="center">暂无数据</td></tr>
+									{{/if}}
+								</script>
+								</tbody>
+							</table>
+						</div>
+						<div class="paging clear padr-16"><!--分页 -->
+							<div id="huasiPagination"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 模板定义弹窗 -->
+			<div id="textTemplateFormDialog">
+				<form id="textTemplateForm" class="default-form">
+					<div class="form-item clear lineblock" id="cataLogCode">
+						<label class="form-label font-16">分类编码：</label>
+						<div class="hs-input">
+							<input required type="text" name="code" autocomplete="off" class="input-inner" maxlength="50">
+						</div>
+					</div>
+					<div class="form-item clear lineblock">
+						<label class="form-label font-16">分类名称：</label>
+						<div class="hs-input">
+							<input required type="text" name="name" autocomplete="off" class="input-inner" maxlength="50">
+						</div>
+					</div>
+					<div class="form-item-button">
+						<input class="hs-button button-default" onclick="closeTextTemplateEditDialog()" value="取消" type="button" readonly/>
+						<input class="hs-button button-primary" id="" value="确认" type="submit" readonly/>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="../../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.form.js"></script>
+<script type="text/javascript" src="../../../lib/layer-3.1.1/layer.js"></script>
+<script type="text/javascript" src="../../../lib/art-template-4.13.2.min.js"></script>
+<script type="text/javascript" src="../../../lib/huasiPagination/huasiPagination.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/config.js"></script>
+<script type="text/javascript" src="../../../js/business/define/catalogManage.js"></script>
+<script>
+    function closeBusinessRelation(){
+        window.parent.document.getElementById("centerCoverContianer").style.display = 'none';
+        window.parent.document.getElementById("centerCoverContianer").setAttribute('src', '');
+    }
+</script>
