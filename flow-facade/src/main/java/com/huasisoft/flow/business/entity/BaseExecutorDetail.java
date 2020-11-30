@@ -46,6 +46,9 @@ public class BaseExecutorDetail extends Model<BaseExecutorDetail> {
     @TableField("EXECUTOR_NAME")
     private String executorName;
 
+    @ApiModelProperty(value = "执行信息")
+    @TableField("MESSAGE")
+    private String message;
 
     @Override
     protected Serializable pkVal() {

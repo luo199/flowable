@@ -19,13 +19,21 @@ public interface UserService {
 	 * @param pid
 	 * @return
 	 */
-	List<Unit> listUnit(String pid); 
+	List<Unit> listUnit(String pid);
+	
 	/**
-	 * 根据上级节点查下级节点（递推查询全部下级）
+	 * 人员树上按姓名模糊查询
 	 * @param pid
 	 * @return
 	 */
-	List<Unit> listUnitCascad(String pid);
+	List<Unit> treeSearch(String name); 
+	/**
+	 * 人员树的根结点
+	 * @param pid
+	 * @return
+	 */
+	List<Unit> treeNodes(String id); 
+	
 	
 	/**
 	 * 获取unit

@@ -1,0 +1,183 @@
+<link rel="stylesheet" href="../../../lib/layer-3.1.1/theme/default/layer.css">
+<link rel="stylesheet" href="../../../lib/huasiPagination/huasi-pagination.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../../css/common.css"/>
+<link rel="stylesheet" type="text/css" href="../../../css/original/index.css"/>
+<link rel="stylesheet" type="text/css" href="../../../css/iconfont/iconfont.css"/>
+<div id="commActionDefineContainer" class="h100 w100">
+    <div class="top-operations clear">
+        <div class="operation-item pointer" onclick="showEditDialog('add')">
+            <i class="iconfont icon-sqr-add"></i>
+            <span class="font-16">新增</span>
+        </div>
+        <div class="operation-item pointer" onclick="showEditDialog('update')">
+            <i class="iconfont icon-edit"></i>
+            <span class="font-16">编辑</span>
+        </div>
+        <div id="modelDelete" class="operation-item pointer" onclick="removeCommActionDefineByCode()">
+            <i class="iconfont icon-remove"></i>
+            <span class="font-16">删除</span>
+        </div>
+
+
+        <div class="top-operations-right fr">
+            <form id="queryProcessForm" class="default-form">
+                <input type="hidden" id="processPage" name="current"/>
+                <input type="hidden" name="size" value="10"/>
+                <div class="form-item clear lineblock">
+                    <label class="form-label font-16">字典名称：</label>
+                    <div class="hs-input hs-input-select " style="width:150px;">
+                        <div class="catalogActionTt relative">
+                            <script id="catalogActionListTt" type="text/html">
+                                <div class="more-box"></div>
+                                <select class="hs-input input-inner" name="catalogCode" onchange="selectName(this);">
+                                    <option value="" disabled selected hidden>-请选择-</option>
+                                    {{if CatalogActions.length>0}}
+                                    {{each CatalogActions as obj index}}
+                                    <option value="{{obj.code}}">{{obj.name}}</option>
+                                    {{/each}}
+                                    {{/if}}
+                                </select>
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-item clear lineblock">
+                    <label class="form-label font-16">按钮：</label>
+                    <div class="hs-input">
+                        <input type="text" name="name" autocomplete="off" class="input-inner" maxlength="50">
+                    </div>
+                </div>
+                <div class="form-item-button lineblock">
+                    <input class="hs-button button-primary" id="commActionDefineSubmitButton" value="确认" type="submit"
+                           readonly/>
+                    <input class="hs-button button-primary" value="重置" type="reset" readonly/>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="bottom-content">
+        <div id="wrapper" class="h100 w100 bg0">
+            <div class="w100 pad-16" id="listDatas">
+                <table class="default-table w100">
+                    <thead>
+                    <tr class="t-a-l color333 font-18">
+                        <th width="5%">ID</th>
+                        <th width="10%">按钮名</th>
+                        <th width="15%">备注</th>
+                        <th width="30%">按钮类全名</th>
+                        <th width="15%">字典名称</th>
+                        <th width="10%">创建人</th>
+                        <th width="20%">创建时间</th>
+                    </tr>
+                    </thead>
+                    <tbody id="commActionsTb" class="color666 font-16">
+                    <script id="commActionsTemplate" type="text/html">
+                        <input id="selectedId" value="" type="hidden"/>
+                        <input id="selectedName" value="" type="hidden"/>
+                        {{if listData.records.length>0}}
+                        {{each listData.records as obj index}}
+                        <tr>
+                            <td>
+                                <label for="{{obj.id}}" class="hs-checkbox">
+                                    <input name="checkboxTest" id="{{obj.id}}" value=""
+                                           onclick="updateSelection(this,'{{obj.id}}','{{obj.name}}')" type="radio"
+                                           class="checkbox-original">
+                                    <span class="checkbox-input">
+								    				<span class="checkbox-inner"></span>
+												</span>
+                                    <span class="checkbox-label">{{(listData.current-1)*listData.size+index+1}}</span>
+                                </label>
+                            </td>
+                            <td>{{obj.name}}</td>
+                            <td>{{obj.remark}}</td>
+                            <td>{{obj.className}}</td>
+                            <td>{{obj.catalogName}}</td>
+                            <td>{{obj.createPersonName}}</td>
+                            <td>{{obj.createTime | dateFormat: 'yyyy-MM-dd hh:mm:ss'}}</td>
+                        </tr>
+                        {{/each}}
+                        {{else}}
+                        <tr>
+                            <td colspan="4" align="center">暂无数据</td>
+                        </tr>
+                        {{/if}}
+                    </script>
+                    </tbody>
+                </table>
+            </div>
+            <div class="paging clear padr-16"><!--分页 -->
+                <div id="huasiPagination"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 新增流程定义弹窗 -->
+<div id="commActionDefineFormDialog">
+    <form id="commActionDefineForm" class="default-form">
+        <div class="form-item clear lineblock">
+            <input type="hidden" name="id" autocomplete="off" class="input-inner" maxlength="50">
+            <input type="hidden" id="catalogName" name="catalogName"/>
+            <label class="form-label font-16">按钮名称：</label>
+            <div class="hs-input">
+                <input style="width:350px;" type="text" name="name" autocomplete="off" class="input-inner"
+                       maxlength="100">
+            </div>
+        </div>
+        <div class="form-item clear lineblock">
+            <label class="form-label font-16">备注：</label>
+            <div class="hs-input">
+                <input style="width:350px;" type="text" name="remark" autocomplete="off" class="input-inner"
+                       maxlength="250">
+            </div>
+        </div>
+        <div class="form-item clear lineblock">
+            <label class="form-label font-16">按钮类全名：</label>
+            <div class="hs-input">
+                <input type="text" style="width:350px;" name="className" autocomplete="off" class="input-inner"
+                       maxlength="250">
+            </div>
+        </div>
+        <div class="form-item clear">
+            <label class="form-label font-16">字典名称：</label>
+            <div class="hs-input hs-input-select ">
+                <div class="catalogActionTb relative" style="width:350px;">
+                    <script id="catalogActionList" type="text/html">
+                        <div class="more-box"></div>
+                        <select class="hs-input input-inner" id="catalogCode" name="catalogCode" class="{required:true}"
+                                onchange="selectName(this);">
+                            <option value="" disabled selected hidden>-请选择-</option>
+                            {{if CatalogActions.length>0}}
+                            {{each CatalogActions as obj index}}
+                            <option value="{{obj.code}}">{{obj.name}}</option>
+                            {{/each}}
+                            {{/if}}
+                        </select>
+                    </script>
+                </div>
+            </div>
+            <!--<div class="hs-input">
+                <input type="text" style="width:350px;"  name="catalogName" autocomplete="off" class="input-inner" maxlength="250">
+            </div>-->
+        </div>
+        <div class="form-item-button">
+            <input class="hs-button button-default" onclick="closeEditDialog()" value="取消" type="button" readonly/>
+            <input class="hs-button button-primary" id="" value="确认" type="submit" readonly/>
+        </div>
+    </form>
+</div>
+
+
+<script type="text/javascript" src="../../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.form.js"></script>
+<script type="text/javascript" src="../../../lib/layer-3.1.1/layer.js"></script>
+<script type="text/javascript" src="../../../lib/art-template-4.13.2.min.js"></script>
+<script type="text/javascript" src="../../../lib/huasiPagination/huasiPagination.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/config.js"></script>
+<script type="text/javascript" src="../../../js/business/define/commonActions.js"></script>

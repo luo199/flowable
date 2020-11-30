@@ -1,0 +1,142 @@
+<link rel="stylesheet" href="../../../lib/layer-3.1.1/theme/default/layer.css">
+<link rel="stylesheet" href="../../../lib/huasiPagination/huasi-pagination.min.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/common.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/original/index.css" />
+<link rel="stylesheet" type="text/css" href="../../../css/iconfont/iconfont.css" />
+<div id="processLimitContainer" class="h100 w100">
+	<div class="top-operations clear top-operations-diff">
+		<div class="operation-item pointer" onclick="showEditDialog()">
+			<i class="iconfont icon-sqr-add"></i>
+			<span class="font-16">配置时限</span>
+		</div>
+		<div class="operation-item pointer" onclick="removeProcessLimit()">
+			<i class="iconfont icon-remove"></i>
+			<span class="font-16">删除时限</span>
+		</div>
+	<div class="bottom-content cover-bottom-content">
+		<div id="wrapper" class="h100 w100 bg0">
+			<div class="w100 pad-16" id="listDatas">
+				<input id="selectedId" type="hidden"/>
+				<input id="timeLimit" type="hidden"/>
+				<input id="flowType" type="hidden"/>
+				<input id="taskPMName" type="hidden"/>
+				<table class="default-table w100">
+					<thead>
+						<tr class="t-a-l color333 font-18">
+							<th width="10%"> 序号</th>
+							<th width="35%">节点名称</th>
+							<th width="35%">时限类型</th>
+							<th width="20%">任务时限</th>
+						</tr>
+					</thead>
+					<tbody id="processLimitTb" class="color666 font-16">
+						 <script id="processLimit" type="text/html">
+							 {{set proc = ManageData.data.procManage}}
+							 <tr>
+								 <td>
+									 <label for="{{proc.id}}" class="hs-checkbox">
+										 <input name="checkboxTemplate" id="{{proc.id}}" value="" onclick="updateSelection(this,'{{proc.name}}','{{proc.flowType}}','{{proc.timeLimit}}','{{proc.id}}')" type="radio" class="checkbox-original">
+										 <span class="checkbox-input">
+								    				<span class="checkbox-inner"></span>
+												</span>
+										 <span class="checkbox-label">{{1}}</span>
+									 </label>
+								 </td>
+								 <td>{{proc.name}}(全流程)</td>
+								 <td>
+									 {{if proc.timeLimit == null}}未配置{{else}}
+									 {{if proc.timeLimit.limitType == 1}}工作日{{else if proc.timeLimit.limitType == 2}}自然日{{/if}}
+									 {{/if}}
+								 </td>
+								 <td>
+									 {{if proc.timeLimit == null}}未配置{{else}}
+									 {{proc.timeLimit.timeLimit}}
+									 {{/if}}
+								 </td>
+							 </tr>
+							 {{if ManageData.data.taskManages.length>0}}
+								{{each ManageData.data.taskManages as value index}}
+									{{set task = ManageData.data.taskManages[index]}}
+									<tr>
+										<td>
+											<label for="{{task.id}}" class="hs-checkbox">
+												<input name="checkboxTemplate" id="{{task.id}}" value="" onclick="updateSelection(this,'{{task.name}}','{{task.flowType}}','{{task.timeLimit}}','{{task.id}}')" type="radio" class="checkbox-original">
+												<span class="checkbox-input">
+								    				<span class="checkbox-inner"></span>
+												</span>
+												<span class="checkbox-label">{{index+2}}</span>
+						    				</label>
+										</td>
+										<td>{{task.name}}</td>
+										<td>
+											{{if task.timeLimit == null}}
+											未配置
+											{{else}}
+											{{if task.timeLimit.limitType == 1}}工作日{{else if task.timeLimit.limitType == 2}}自然日{{/if}}
+											{{/if}}
+										</td>
+										<td>
+											{{if task.timeLimit == null}}
+											未配置
+											{{else}}
+											{{task.timeLimit.timeLimit}}
+											{{/if}}
+										</td>
+									</tr>
+							 	{{/each}}
+							 {{else}}
+								<tr><td colspan="6" align="center">暂无数据</td></tr>
+							 {{/if}}  
+						 </script>
+					</tbody>
+				</table>
+			</div>
+			<div class="paging clear padr-16"><!--分页 -->
+				<div id="huasiPagination"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 模板定义弹窗 -->
+<div id="processLimitFormDialog">
+	<form id="processLimitForm" class="default-form">
+		<div class="form-item clear">
+			<label class="form-label font-16">节点名称：</label>
+				<label class="form-label font-16" id="taskName" ></label>
+		</div>
+		<div class="form-item clear">
+			<label class="form-label font-16"> 时限类型：</label>
+			<div class="hs-input hs-input-select relative">
+				 <div class="more-box"></div>
+				<select class="hs-input input-inner" name="limitType"  placeholder="-请选择-" >
+					<option value=1>工作日</option>
+					<option value=2>自然日</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-item clear">
+			<label class="form-label font-16">时限(天数)：</label>
+			<div class="hs-input">
+				<input required type="text" name="timeLimit" autocomplete="off" class="input-inner" maxlength="50">
+			</div>
+		</div>
+		<div class="form-item-button">
+			<input class="hs-button button-default" onclick="closeEditDialog()" value="取消" type="button" readonly/>
+	  		<input class="hs-button button-primary" id="" value="确认" type="submit" readonly/>
+		</div>
+		<input type="hidden" name="id">
+		<input type="hidden" name="taskId">
+		<input type="hidden" name="bizCode">
+	</form>
+</div>
+</div>
+<script type="text/javascript" src="../../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../../../lib/layer-3.1.1/layer.js"></script>
+<script type="text/javascript" src="../../../lib/art-template-4.13.2.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.form.js"></script>
+<script type="text/javascript" src="../../../lib/huasiPagination/huasiPagination.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/config.js"></script>
+<script type="text/javascript" src="../../../js/business/define/processLimit.js"></script>

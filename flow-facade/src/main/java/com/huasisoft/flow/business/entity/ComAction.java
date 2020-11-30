@@ -55,6 +55,14 @@ public class ComAction extends Model<ComAction> {
     @TableField("CREATE_TIME")
     private Date createTime;
 
+    @ApiModelProperty(value = "创建时间")
+    @TableField("CATALOG_CODE")
+    private String catalogCode;
+
+    @ApiModelProperty(value = "创建时间")
+    @TableField("CATALOG_NAME")
+    private String catalogName;
+
 
     @Override
     protected Serializable pkVal() {

@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * <p>
@@ -21,7 +22,6 @@ import java.util.Date;
  * @since 2020-08-14
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
 @TableName("FLOW_BUSINESS_CATALOG")
 @ApiModel(value="BusinessCatalog对象", description="业务分类表")
 public class BusinessCatalog extends Model<BusinessCatalog> {
@@ -52,10 +52,31 @@ public class BusinessCatalog extends Model<BusinessCatalog> {
     @TableField("STATUS")
     private String status;
 
+    @ApiModelProperty(value = "父类别key")
+    @TableField("PCODE")
+    private String pcode;
+
+    @ApiModelProperty(value = "排序号")
+    @TableField("ORDER_NUMBER")
+    private Integer orderNumber;
+
 
     @Override
     protected Serializable pkVal() {
         return this.code;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BusinessCatalog)) return false;
+        if (!super.equals(o)) return false;
+        BusinessCatalog that = (BusinessCatalog) o;
+        return Objects.equals(code, that.code);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), code);
+    }
 }

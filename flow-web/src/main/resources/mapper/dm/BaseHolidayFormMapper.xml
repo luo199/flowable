@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huasisoft.flow.business.mapper.BaseHolidayFormMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.huasisoft.flow.business.entity.BaseHolidayForm">
+        <id column="ID" property="id" />
+        <result column="NAME" property="name" />
+        <result column="POSITION" property="position" />
+        <result column="DEPARTMENT" property="department" />
+        <result column="PHONE_NUMBER" property="phoneNumber" />
+        <result column="HOLIDAY_TYPE" property="holidayType" />
+        <result column="RE_PROCEDURE" property="reProcedure" />
+        <result column="WORK_LENGTH" property="workLength" />
+        <result column="LEAVE_SHENZHEN" property="leaveShenzhen" />
+        <result column="GO_WHERE" property="goWhere" />
+        <result column="START_HOLIDAY_TIME" property="startHolidayTime" />
+        <result column="END_HOLIDAY_TIME" property="endHolidayTime" />
+        <result column="HOLIDAY_TIME" property="holidayTime" />
+        <result column="SHOULD_HOLIDAY_TIME" property="shouldHolidayTime" />
+        <result column="HAS_HOLIDAY_TIME" property="hasHolidayTime" />
+        <result column="OFF_HOLIDAY_NAME" property="offHolidayName" />
+        <result column="OFF_HOLIDAY_TIME" property="offHolidayTime" />
+        <result column="ACTUAL_HOLIDAY_TIME" property="actualHolidayTime" />
+        <result column="OFF_HOLIDAY_RECORD" property="offHolidayRecord" />
+        <result column="REMARK" property="remark" />
+        <result column="FORM_STATUS" property="formStatus"/>
+        <result column="EXECUTOR_ONE_ID" property="executorOneId"/>
+        <result column="EXECUTOR_TWO_ID" property="executorTwoId"/>
+        <result column="BIZ_CODE" property="bizCode"/>
+    </resultMap>
+
+</mapper>

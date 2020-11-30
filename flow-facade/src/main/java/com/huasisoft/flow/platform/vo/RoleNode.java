@@ -25,6 +25,6 @@ public class RoleNode implements Serializable{
 	private Integer tabIndex;
 	
 	@ApiModelProperty("父节点ID")
-	private Integer parentID;
+	private String parentID;
 	
 }

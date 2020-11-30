@@ -9,6 +9,7 @@
         <result column="TYPE" property="type" />
         <result column="EXECUTOR_ID" property="executorId" />
         <result column="EXECUTOR_NAME" property="executorName" />
+        <result column="MESSAGE" property="message" />
     </resultMap>
 
 </mapper>

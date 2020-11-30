@@ -38,6 +38,18 @@ public class BaseExecutor extends Model<BaseExecutor> {
     @ApiModelProperty(value = "任务节点ID")
     @TableField("TASK_ID")
     private String taskId;
+    
+    @ApiModelProperty(value = "执行对象类型（1.机构节点，2角色,3.规则）")
+    @TableField("TYPE")
+    private String type;
+
+    @ApiModelProperty(value = "执行对象主键")
+    @TableField("EXECUTOR_ID")
+    private String executorId;
+
+    @ApiModelProperty(value = "执行对象名")
+    @TableField("EXECUTOR_NAME")
+    private String executorName;
 
     @ApiModelProperty(value = "创建人")
     @TableField("CREATE_PERSON_NAME")

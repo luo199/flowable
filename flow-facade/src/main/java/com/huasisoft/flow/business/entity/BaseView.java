@@ -34,7 +34,7 @@ public class BaseView extends Model<BaseView> {
     @TableField("BIZ_CODE")
     private String bizCode;
 
-    @ApiModelProperty(value = "视图类型（1.表单，2正文，3.通用页面）")
+    @ApiModelProperty(value = "视图类型（1.表单，2页面）")
     @TableField("VIEW_TYPE")
     private Integer viewType;
 
@@ -53,6 +53,11 @@ public class BaseView extends Model<BaseView> {
     @ApiModelProperty(value = "视图对象主键")
     @TableField("VIEW_OBJ_ID")
     private String viewObjId;
+
+    @ApiModelProperty(value = "视图分组")
+    @TableField("VIEW_GROUP")
+    private Integer viewGroup;
+
 
 
     @Override

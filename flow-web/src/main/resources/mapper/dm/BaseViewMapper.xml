@@ -4,13 +4,14 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.huasisoft.flow.business.entity.BaseView">
-        <id column="GU" property="gu" />
+        <id column="ID" property="id" />
         <result column="BIZ_CODE" property="bizCode" />
         <result column="VIEW_TYPE" property="viewType" />
         <result column="ORDER_NUMBER" property="orderNumber" />
         <result column="TASK_ID" property="taskId" />
         <result column="VIEW_NAME" property="viewName" />
         <result column="VIEW_OBJ_ID" property="viewObjId" />
+        <result column="VIEW_GROUP" property="viewGroup" />
     </resultMap>
 
 </mapper>

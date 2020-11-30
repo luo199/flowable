@@ -4,18 +4,36 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.huasisoft.flow.business.entity.BusinessCatalog">
-        <id column="CODE" property="code" />
-        <result column="NAME" property="name" />
-        <result column="CREATOR_ID" property="creatorId" />
-        <result column="CREATOR_NAME" property="creatorName" />
-        <result column="CREATR_TIME" property="creatrTime" />
-        <result column="STATUS" property="status" />
+        <id column="CODE" property="code"/>
+        <result column="NAME" property="name"/>
+        <result column="CREATOR_ID" property="creatorId"/>
+        <result column="CREATOR_NAME" property="creatorName"/>
+        <result column="CREATR_TIME" property="creatrTime"/>
+        <result column="STATUS" property="status"/>
+        <result column="PCODE" property="pcode"/>
+        <result column="ORDER_NUMBER" property="orderNumber"/>
     </resultMap>
 
 
-   <select id="page" resultMap = "BaseResultMap">
-    select * from ${dbSchema}FLOW_BUSINESS_CATALOG f
-    where f.status='0'
-    order by f.CREATR_TIME desc
+    <select id="page" resultMap="BaseResultMap">
+       SELECT C.*  FROM ${dbSchema}FLOW_BUSINESS_CATALOG C WHERE STATUS=0 START WITH PCODE = '0' CONNECT BY PRIOR CODE = PCODE ORDER  siblings BY ORDER_NUMBER
 </select>
+
+    <select id="listByPCode" resultMap="BaseResultMap">
+       SELECT C.*  FROM ${dbSchema}FLOW_BUSINESS_CATALOG C WHERE STATUS=0 START WITH PCODE = #{pcode} CONNECT BY PRIOR CODE = PCODE ORDER  siblings BY ORDER_NUMBER
+</select>
+
+    <select id="selectListByChildCode" resultMap="BaseResultMap">
+         SELECT * FROM ${dbSchema}FLOW_BUSINESS_CATALOG START WITH CODE = #{code} CONNECT BY CODE = PRIOR PCODE;
+    </select>
+
+    <update id="updateStatus" parameterType="string">
+       update ${dbSchema}FLOW_BUSINESS_CATALOG set status=1  where code in(SELECT C.code FROM ${dbSchema}FLOW_BUSINESS_CATALOG C  START WITH code = #{code} CONNECT BY PRIOR code = pcode)
+    </update>
+
+    <update id="updateStatusWithoutMe">
+        update ${dbSchema}FLOW_BUSINESS_CATALOG set status=#{status}  where code in(SELECT C.code FROM ${dbSchema}FLOW_BUSINESS_CATALOG C where C.code != #{code}  START WITH code = #{code} CONNECT BY PRIOR code = pcode)
+    </update>
+
+
 </mapper>

@@ -188,6 +188,7 @@ public class H5RoleServiceImpl implements RoleService {
 	public RoleNode acRoleNodeToRoleNode(ACRoleNode acRoleNode) {
 		RoleNode roleNode = new RoleNode();
 		BeanUtils.copyProperties(acRoleNode, roleNode);
+		//roleNode.setParentID(acRoleNode.getParentID());
 		return roleNode;
 	}
 

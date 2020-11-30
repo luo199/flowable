@@ -1,16 +1,10 @@
 package com.huasisoft.flow.common.config;
 import org.flowable.ui.common.service.idm.RemoteIdmService;
 import org.flowable.ui.modeler.properties.FlowableModelerAppProperties;
-import org.flowable.ui.modeler.servlet.ApiDispatcherServletConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.DispatcherServlet;
 
 @Configuration
 @EnableConfigurationProperties(FlowableModelerAppProperties.class)

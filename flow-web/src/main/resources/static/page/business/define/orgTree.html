@@ -1,0 +1,159 @@
+<link rel="stylesheet" href="../../../lib/layer-3.1.1/theme/default/layer.css">
+<link rel="stylesheet" href="../../../lib/huasiPagination/huasi-pagination.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../../css/common.css"/>
+<link rel="stylesheet" type="text/css" href="../../../css/original/index.css"/>
+<link rel="stylesheet" type="text/css" href="../../../css/iconfont/iconfont.css"/>
+<link rel="stylesheet" href="../../../lib/zTree_v3/css//demo.css" type="text/css">
+<link rel="stylesheet" href=" ../../../lib/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+
+<body>
+<div style="width: auto">
+    <div style="display: inline-block">
+        <ul id="orgTree" class="ztree" style="padding:0;"></ul>
+    </div>
+    <div id="ListUserFormDialog">
+        <form id="ListUserForm" class="default-form">
+            <div class="form-item clear lineblock">
+                <input type="hidden" name="id">
+                <input type="hidden" name="bizCode">
+                <input type="hidden" name="taskId">
+                <input type="hidden" name="createPersonName">
+                <input type="hidden" name="createPersonId">
+                <input type="hidden" name="createTime">
+                <input type="hidden" name="type">
+                <input type="hidden" name="executorId">
+                <input type="hidden" name="executorName">
+                <input type="hidden" id="userList" name="userList">
+            </div>
+            <div class="form-item-button">
+                <input class="hs-button button-default" onclick="closeEditDialog()" value="取消" type="button" readonly/>
+                <input class="hs-button button-primary" id="userSubmitButton" value="确认" type="submit" readonly/>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript" src="../../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../../lib/zTree_v3/js/jquery.ztree.all.min.js"></script>
+
+<script type="text/javascript" src="../../../lib/layer-3.1.1/layer.js"></script>
+<script type="text/javascript" src="../../../lib/art-template-4.13.2.min.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/config.js"></script>
+
+
+<script type="text/javascript">
+    $(function () {
+        //window.common.getNiceScroll("#wrapper");
+        showUserList();
+        $('#ListUserForm').on('submit', function () {
+            return false; //阻止表单默认提交
+        })
+        $('#userSubmitButton').bind("click", function () {
+            submitFormData();
+        });
+    });
+
+    function showUserList() {
+        var settings = {
+            async: {
+                enable: true,
+                type: "get",
+                autoParam: ["id=pid"],
+                contentType: 'application/json',
+                dataType: 'text',
+                url: window.top.contextPath + window.portPath.getListUserFindByPid,
+            },
+            data: {
+                simpleData: {
+                    enable: true, //true 、 false 分别表示 使用 、 不使用 简单数据模式
+                    idKey: "id", //节点数据中保存唯一标识的属性名称
+                    pIdKey: "parentID", //节点数据中保存其父节点唯一标识的属性名称
+                    rootPId: -1, //用于修正根节点父节点数据，即 pIdKey 指定的属性值
+                },
+                key: {
+                    name: "name", //zTree 节点数据保存节点名称的属性名称  默认值："name"
+                }
+            },
+            check: {
+                enable: true, //true 、 false 分别表示 显示 、不显示 复选框或单选框
+                nocheckInherit: true, //当父节点设置 nocheck = true 时，设置子节点是否自动继承 nocheck = true
+                chkboxType: {"Y": "s", "N": "ps"}
+            },
+            callback: {
+                beforeCheck: true,
+                onCheck: function (event, treeId, treeNode) {
+                    var treeObj = $.fn.zTree.getZTreeObj("orgTree");
+                    var nodes = treeObj.getCheckedNodes(true);
+                    var userList = [];
+                    for (var i = 0; i < nodes.length; i++) {
+                        var user = {};
+                        user["bizCode"] = window.common.getQueryString("code");
+                        user["taskId"] = window.common.getQueryString("taskId");
+                        user["type"] = nodes[i].type;
+                        user["executorId"] = nodes[i].id;
+                        user["executorName"] = nodes[i].name;
+                        userList.push(user);
+                    }
+                    ;
+                    var jsonList = JSON.stringify(userList)
+                    $("#userList").val(jsonList);
+                },
+                onClick: function (event, treeId, treeNode, clickFlag) {
+                    if (!treeNode.isParent) {
+                        // alert("treeId自动编号：" + treeNode.tId + ", 节点id是：" + treeNode.id + ", 节点文本是：" + treeNode.name+",是否是父节点："+treeNode.isParent);
+                        var _url = window.top.contextPath + window.portPath.getListUserFindByPid + "?pid=" + treeNode.id;
+                        // console.log(_url);
+                        window.common.networkConnect(_url, "GET", window.conType.conTyForm, null, function (res) {
+                            if (res.exchangeStatus == 1) {
+                                var treeObj = $.fn.zTree.getZTreeObj("orgTree");
+                                var parentZNode = treeObj.getNodeByParam("id", treeNode.id, null);
+                                if (res.data && res.data.length > 0) {
+                                    newNode = treeObj.addNodes(parentZNode, res.data, false)
+                                } else {
+                                }
+                            }
+                        });
+                    } else {
+                    }
+                },
+            },
+        };
+
+        var _url = window.top.contextPath + window.portPath.getListUserParentNodes;
+        window.common.networkConnect(_url, "GET", window.conType.conTyForm, '', function (res) {
+            if (res.exchangeStatus == 1) {
+                zTreeObj = $.fn.zTree.init($("#orgTree"), settings, res.data); //初始化树
+                zTreeObj.expandAll(true);   //true 节点全部展开、false节点收缩
+            }
+        });
+
+        function onCheck(event, treeId, treeNode) {
+            var treeObj = $.fn.zTree.getZTreeObj("orgTree"),
+                nodes = treeObj.getCheckedNodes(true),
+                v = "";
+            for (var i = 0; i < nodes.length; i++) {
+                v += nodes[i].name + ",";
+                // console.log("节点id:"+nodes[i].id+"节点名称"+v); //获取选中节点的值
+                console.log("节点id:" + nodes[i].id + "节点名称" + nodes[i].name); //获取选中节点的值
+            }
+        }
+
+    }
+
+    function submitFormData() {
+        var paramsObject = $("#userList").val();
+        console.log(paramsObject);
+        var _url = window.top.contextPath + window.portPath.processExecutorSave;
+        window.common.networkConnect(_url, "post", window.conType.conTyJson, paramsObject, function (res) {
+            if (res.id != '') {
+                layer.msg('操作成功', {icon: 1});
+            } else {
+                layer.msg("操作失败", {icon: 2})
+            }
+        });
+    }
+
+
+</script>

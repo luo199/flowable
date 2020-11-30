@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -46,6 +48,17 @@ public class BaseAction extends Model<BaseAction> {
     @TableField("ORDER_NUMBER")
     private Integer orderNumber;
 
+    @ApiModelProperty(value = "流程节点ID")
+    @TableField("TASK_ID")
+    private String taskId;
+
+    @ApiModelProperty(value = "数据字典CODE")
+    @TableField("TASK_ID")
+    private String catalogCode;
+
+    @ApiModelProperty(value = "数据字典NAME")
+    @TableField("TASK_ID")
+    private String catalogName;
 
     @Override
     protected Serializable pkVal() {

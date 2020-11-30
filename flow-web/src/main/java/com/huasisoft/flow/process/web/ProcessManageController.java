@@ -3,19 +3,16 @@ package com.huasisoft.flow.process.web;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
+import com.huasisoft.flow.process.service.impl.ProcInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.flowable.bpmn.BpmnAutoLayout;
 import org.flowable.bpmn.converter.BpmnXMLConverter;
-import org.flowable.bpmn.model.BpmnModel;
-import org.flowable.bpmn.model.SequenceFlow;
-import org.flowable.bpmn.model.UserTask;
+import org.flowable.bpmn.model.*;
 import org.flowable.common.engine.api.FlowableObjectNotFoundException;
 import org.flowable.editor.language.json.converter.BpmnJsonConverter;
 import org.flowable.editor.language.json.converter.util.CollectionUtils;
@@ -72,6 +69,8 @@ public class ProcessManageController {
 	private ModelService modelService;
 	@Autowired
 	private ActReProcdefService actReProcdefService;
+	@Autowired
+	private ProcInfoService procInfoService;
 	
 	@Autowired
 	private ActDeModelService actDeModelService;

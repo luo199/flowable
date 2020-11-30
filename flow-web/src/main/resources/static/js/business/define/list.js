@@ -247,9 +247,9 @@ function updateSelection(even, code,name){//更新选择状态
 	}
 }
 function queryAllCataLog(code, even){//获取业务类别列表
-    // name = $(even).find("option:selected").text();
-    var _url = window.top.contextPath + window.portPath.cataLogList;
-    window.common.networkConnect(_url, "POST", window.conType.conTyForm, null, function(res) {
+    var pcode = 'YWLB';
+    var _url = window.top.contextPath + window.portPath.cataLogList+"?pcodes="+pcode;
+    window.common.networkConnect(_url, "GET", window.conType.conTyJson, null, function(res) {
         if (res.exchangeStatus == 1) {
         	var initSelectData = {contextPath: window.top.contextPath, businessCatalogData: res.data,selectedObj: {code: '', name: name}};
         	
@@ -273,18 +273,6 @@ function selectChange(even){//
     $(even).siblings("input").val(selectedText);
 }
 
-function openBusinessCatalogPage(){//打开业务分类管理
-	layer.open({
-        title : '类别管理',
-        type : 2,
-		//offset : '10%',
-		area:[900,700],
-        content : window.top.contextPath+"/static/page/business/define/catalogmanage.html"
-    });
-	
-    //window.parent.document.getElementById("centerCoverContianer").style.display = 'block';
-  // window.parent.document.getElementById("centerCoverContianer").setAttribute("src",window.top.contextPath+"/static/page/business/define/catalogmanage.html");
-}
 
 function openBusinessManagePage() {//打开业务配置页面
     var code = $("#selectedBusinessCode").val();

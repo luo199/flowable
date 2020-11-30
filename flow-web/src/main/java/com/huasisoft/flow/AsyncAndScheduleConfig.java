@@ -24,7 +24,7 @@ public class AsyncAndScheduleConfig implements AsyncConfigurer,SchedulingConfigu
 	@Value("${threadPool.min}")  
 	int threadPoolMin;  
 	@Value("${threadPool.max}")  
-	int threadPoolMax;
+	int threadPoolMax;  
 	@Value("${threadPool.queueSize}")  
 	int threadPoolQueueSize;
 	@Value("${threadPool.keepAlive}")  

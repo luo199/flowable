@@ -51,6 +51,14 @@ public class ComPage extends Model<ComPage> {
     @TableField("CREATE_TIME")
     private Date createTime;
 
+    @ApiModelProperty(value = "字典CODE")
+    @TableField("CATALOG_CODE")
+    private String catalogCode;
+
+    @ApiModelProperty(value = "字典NAME")
+    @TableField("CATALOG_NAME")
+    private String catalogName;
+
 
     @Override
     protected Serializable pkVal() {

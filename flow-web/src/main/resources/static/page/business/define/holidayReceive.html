@@ -1,0 +1,336 @@
+<link rel="stylesheet" href="../../../lib/layer-3.1.1/theme/default/layer.css">
+<link rel="stylesheet" href="../../../lib/huasiPagination/huasi-pagination.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../../css/common.css"/>
+<link rel="stylesheet" type="text/css" href="../../../css/original/index.css"/>
+<link rel="stylesheet" type="text/css" href="../../../css/iconfont/iconfont.css"/>
+<div id="holidayRequestContainer" class="h100 w100">
+    <!--    <div id="wrapper" class="h100 w100 bg0">-->
+    <div class="top-operations clear">
+        <div class="operation-item pointer" onclick="editHolidayForm()">
+            <i class="iconfont icon-sqr-add"></i>
+            <span class="font-16" type="submit">查看详情</span>
+        </div>
+        <div id="approveBtn" style="display:none;" class="operation-item pointer" onclick="executeMessage()">
+            <i class="iconfont icon-sqr-add"></i>
+            <span class="font-16" type="submit">销假</span>
+        </div>
+        <div class="operation-item pointer" onclick="openLookUpPage()">
+            <i class="iconfont icon-sqr-add"></i>
+            <span class="font-16">打印</span>
+        </div>
+
+        <div class="top-operations-right fr">
+            <form id="queryProcessForm" class="default-form">
+                <input type="hidden" id="processPage" name="current"/>
+                <input type="hidden" name="size" value="10"/>
+                <div class="form-item clear lineblock">
+                    <label class="form-label font-16">请假事由：</label>
+                    <div class="hs-input">
+                        <input type="text" name="catalogCode" autocomplete="off" class="input-inner" maxlength="50">
+                    </div>
+                </div>
+                <div class="form-item clear lineblock">
+                    <label class="form-label font-16">姓名：</label>
+                    <div class="hs-input">
+                        <input type="text" name="name" autocomplete="off" class="input-inner" maxlength="50">
+                    </div>
+                </div>
+                <div class="form-item-button lineblock">
+                    <input class="hs-button button-primary" id="commButton" value="确认" type="submit"
+                           readonly/>
+                    <input class="hs-button button-primary" value="重置" type="reset" readonly/>
+                </div>
+            </form>
+        </div>
+        <!--        </div>-->
+    </div>
+
+    <div class="bottom-content">
+        <div class="h100 w100 bg0">
+            <div class="w100 pad-16" id="listDatas">
+                <table class="default-table w100">
+                    <thead>
+                    <tr class="t-a-l color333 font-18">
+                        <th width="5%">ID</th>
+                        <th width="10%">姓名</th>
+                        <th width="10%">职位</th>
+                        <th width="10%">电话</th>
+                        <th width="10%">部门</th>
+                        <th width="40%">请假事由</th>
+                        <th width="10%">当前审批人</th>
+                    </tr>
+                    </thead>
+                    <tbody id="baseHolidayTb" class="color666 font-16">
+                    <script id="baseHolidayTemplate" type="text/html">
+                        <input id="selectedId" value="" type="hidden"/>
+                        <input id="selectedName" value="" type="hidden"/>
+                        {{if listData.length>0}}
+                        {{each listData as value index}}
+                        {{set obj = listData[index].baseHolidayForm }}
+                        <tr>
+                            <td>
+                                <label for="{{obj.id}}" class="hs-checkbox">
+                                    <input name="checkboxTest" id="{{obj.id}}" value=""
+                                           onclick="updateSelection(this,'{{obj.id}}','{{obj.position}}')" type="radio"
+                                           class="checkbox-original">
+                                    <span class="checkbox-input">
+								    				<span class="checkbox-inner"></span>
+												</span>
+                                    <span class="checkbox-label">{{index+1}}</span>
+                                </label>
+                            </td>
+                            <td>{{obj.name}}</td>
+                            <td>{{obj.position}}</td>
+                            <td>{{obj.phoneNumber}}</td>
+                            <td>{{obj.department}}</td>
+                            <td>{{obj.holidayType}}(从{{obj.startHolidayTime | dateFormat: 'yyyy-MM-dd'}}
+                                到{{obj.endHolidayTime | dateFormat: 'yyyy-MM-dd'}}共{{obj.holidayTime}}天)
+                                {{if obj.remark ==null}}
+                                <span></span>
+                                {{else}}
+                                <span>备注：{{obj.remark}}</span>
+                                {{/if}}
+                            </td>
+                            <td>{{obj.executorName}}</td>
+                        </tr>
+                        {{/each}}
+                        {{else}}
+                        <tr>
+                            <td colspan="7" align="center">暂无数据</td>
+                        </tr>
+                        {{/if}}
+                    </script>
+                    </tbody>
+                </table>
+            </div>
+            <div class="paging clear padr-16"><!--分页 -->
+                <div id="huasiPagination"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--选择人送交人弹出框-->
+<div id="commFormDialog">
+    <form id="commDefineForm" class="default-form">
+        <input type="hidden" name="bizCode">
+        <input type="hidden" name="holidayFormId">
+        <div class="form-item clear">
+            <label class="form-label font-16">选择送交人：</label>
+            <div class="hs-input hs-input-select ">
+                <div class="allExecutorTb relative" style="width:200px;">
+                    <script id="allExecutorList" type="text/html">
+                        <div class="more-box"></div>
+                        <select class="hs-input input-inner" id="executorId" name="executorId" class="{required:true}"
+                                onchange="selectChange(this);">
+                            <option value="" disabled selected hidden>-请选择-</option>
+                            {{if manageData.length>0}}
+                            {{each manageData as obj index}}
+                            <option value="{{obj.id}}">{{obj.executorName}}</option>
+                            {{/each}}
+                            {{/if}}
+                        </select>
+                    </script>
+                </div>
+            </div>
+        </div>
+        <div class="form-item-button">
+            <input class="hs-button button-default" onclick="closeDialog()" value="取消" type="button" readonly/>
+            <input class="hs-button button-primary" id="commDefineFormSubmit" value="确认" type="submit" readonly/>
+        </div>
+    </form>
+</div>
+
+<!--查看请假信息弹出框-->
+<div id="baseHolidayFormDialog" style="width: 60%;margin: auto;">
+    <form id="baseHolidayForm" style="border: 2px solid #dcdfe6;" class="default-form">
+        <!--margin: 10px 350px 50px 350px-->
+        <input type="hidden" id="id" name="id"/>
+        <input type="hidden" id="formStatus" name="formStatus"/>
+        <div class=" color333 font-18" style="text-align: center;margin-bottom: 30px">
+            <span class="font-18" style="">光明区请休假基本信息表</span>
+        </div>
+        <div>
+            <div style="border-bottom: 1px solid #dcdfe6">
+                <div class="form-item" style="padding: 0">
+                    <label class="form-label font-16">姓名：</label>
+                    <div class="hs-input" style="padding-top: 8px">
+                        <input type="text" style="line-height: normal;" name="name" class="input-inner"
+                               maxlength="50">
+                    </div>
+                </div>
+                <div class="form-item" style="padding: 0;float: right">
+                    <label class="form-label font-16">职务：</label>
+                    <div class="hs-input" style="padding-top: 8px">
+                        <input type="text" style="line-height: normal;" name="position" class="input-inner"
+                               maxlength="50">
+                    </div>
+                </div>
+            </div>
+            <div style="border-bottom: 1px solid #dcdfe6">
+                <div class="form-item" style="padding: 0">
+                    <label class="form-label font-16">单位：</label>
+                    <div class="hs-input" style="padding-top: 8px">
+                        <input type="text" style="line-height: normal;" name="department" class="input-inner"
+                               maxlength="50">
+                    </div>
+                </div>
+                <div class="form-item" style="padding: 0;float: right">
+                    <label class="form-label font-16">联系电话：</label>
+                    <div class="hs-input" style="padding-top: 8px">
+                        <input type="text" style="line-height: normal;" name="phoneNumber" class="input-inner"
+                               maxlength="50">
+                    </div>
+                </div>
+            </div>
+            <div style="border-bottom: 1px solid #dcdfe6">
+                <div class="form-item" style="padding: 0">
+                    <label class="form-label font-16">请假类型：</label>
+                    <div class="hs-input" style="padding-top: 8px">
+                        <input type="text" style="line-height: normal;" name="holidayType" class="input-inner"
+                               maxlength="50">
+                    </div>
+                </div>
+                <div class="form-item" style="padding: 0;float: right">
+                    <label class="form-label font-16">补办手续：</label>
+                    <div class="hs-input" style="padding-top: 8px">
+                        <input type="text" style="line-height: normal;" name="reProcedure" class="input-inner"
+                               maxlength="50">
+                    </div>
+                </div>
+            </div>
+            <div style="border-bottom: 1px solid #dcdfe6;">
+                <div class="form-item clear" style="padding: 3px 3px;">
+                    <label class="form-label font-16" style="text-align: left;width: auto">参加工作时间：</label>
+                    <div class="hs-input" style="padding-top: 8px">
+                        <input type="text" style="line-height: normal;" name="workLength" class="input-inner"
+                               maxlength="50">
+                    </div>
+                </div>
+
+            </div>
+            <div style="border-bottom: 1px solid #dcdfe6">
+                <div class="form-item" style="padding: 0">
+                    <label class="form-label font-16">是否离深：</label>
+                    <div class="hs-input" style="padding-top: 8px">
+                        <input type="text" style="line-height: normal;" name="leaveShenzhen" class="input-inner"
+                               maxlength="50">
+                    </div>
+                </div>
+                <div class="form-item" style="padding: 0;float: right">
+                    <label class="form-label font-16">外出地点：</label>
+                    <div class="hs-input" style="padding-top: 8px">
+                        <input type="text" style="line-height: normal;" name="goWhere" class="input-inner"
+                               maxlength="50">
+                    </div>
+                </div>
+            </div>
+            <div style="border-bottom: 1px solid #dcdfe6">
+                <div class="form-item" style="padding: 0">
+                    <label class="form-label font-16" style="text-align: left; width: auto">请假起止日期：</label>
+                    <div class="hs-input" style="padding-top: 8px">
+                        <input type="date" style="line-height: normal;" name="startHolidayTime"
+                               class="input-inner"
+                               id="startHolidayTime" maxlength="50">
+                    </div>
+                    --
+                    <div class="hs-input" style="padding-top: 8px">
+                        <input type="date" style="line-height: normal;" name="endHolidayTime"
+                               class="input-inner"
+                               id="endHolidayTime" maxlength="50">
+                    </div>
+                </div>
+                <div class="form-item" style="padding: 0;float: right">
+                    <label class="form-label font-16">天数：</label>
+                    <div class="hs-input" style="padding-top: 8px">
+                        <input type="text" style="line-height: normal;" id="holidayTime" name="holidayTime"
+                               class="input-inner"
+                               maxlength="50" readonly>
+                    </div>
+                </div>
+            </div>
+            <div style="border-bottom: 1px solid #dcdfe6">
+                <div class="form-item" style="padding: 0">
+                    <label class="form-label font-16">应休：</label>
+                    <div class="hs-input" style="padding-top: 8px">
+                        <input type="text" id="shouldHolidayTime" name="shouldHolidayTime" class="input-inner"
+                               maxlength="50" readonly>
+                    </div>
+                    <span class="font-16" style="color: #666;display: inline-block">天（工作日）</span>
+                </div>
+                <div class="form-item" style="padding: 0;float: right">
+                    <label class="form-label font-16">已休：</label>
+                    <div class="hs-input" style="padding-top: 8px">
+                        <input type="text" id="hasHolidayTime" class="input-inner" name="hasHolidayTime"
+                               maxlength="50" readonly>
+                    </div>
+                    <span class="font-16" style="color: #666;display: inline-block">天</span>
+                </div>
+            </div>
+            <div style="display:inline-block;">
+                <div style="height: 116px;float: left">
+                    <label class="form-label font-16"
+                           style="margin-top: 35px">销假备案：</label>
+                </div>
+                <div style="float: none;">
+                    <div class="form-item clear" style="padding: 0;float: left">
+                        <label class="form-label font-16" style="width: auto">销假申请人：</label>
+                        <div class="hs-input" style="padding-top: 8px">
+                            <input type="text" name="offHolidayName" class="input-inner" maxlength="50">
+                        </div>
+                    </div>
+                    <div class="form-item" style="padding: 0;float: right">
+                        <label class="form-label font-16" style="width: auto">销假申请日期：</label>
+                        <div class="hs-input" style="padding-top: 8px">
+                            <input type="date" style="line-height: normal;" name="offHolidayTime"
+                                   class="input-inner"
+                                   id="offHolidayTime" maxlength="50">
+                        </div>
+                    </div>
+                    <div class="form-item" style="padding: 0;float: left">
+                        <label class="form-label font-16" style="width: auto">实际请假天数：</label>
+                        <div class="hs-input" style="padding-top: 8px">
+                            <input type="text" style="line-height: normal;" name="actualHolidayTime"
+                                   class="input-inner"
+                                   maxlength="50">
+                        </div>
+                    </div>
+                    <div class="form-item" style="padding: 0;float: right">
+                        <label class="form-label font-16" style="width: auto">销假备案人：</label>
+                        <div class="hs-input" style="padding-top: 8px">
+                            <input type="text" style="line-height: normal;" name="offHolidayRecord"
+                                   class="input-inner"
+                                   maxlength="50">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="border-bottom: 1px solid #dcdfe6;">
+                <div class="form-item" style="padding: 0">
+                    <label class="form-label font-16">备注：</label>
+                    <div class="hs-input" style="padding-top: 8px">
+                        <input type="text" name="remark" class="input-inner"
+                               maxlength="50">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-item-button">
+            <input class="hs-button button-default" onclick="closeHolidayDialog()" value="取消" type="button"
+                   readonly/>
+        </div>
+    </form>
+</div>
+
+
+
+<script type="text/javascript" src="../../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/vue.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="../../../lib/jquery/jquery.form.js"></script>
+<script type="text/javascript" src="../../../lib/layer-3.1.1/layer.js"></script>
+<script type="text/javascript" src="../../../lib/art-template-4.13.2.min.js"></script>
+<script type="text/javascript" src="../../../lib/huasiPagination/huasiPagination.js"></script>
+<script type="text/javascript" src="../../../js/common.js"></script>
+<script type="text/javascript" src="../../../js/config.js"></script>
+<script type="text/javascript" src="../../../js/business/define/holidayReceive.js"></script>

@@ -1268,13 +1268,7 @@
 }
 .advanced-search .two-column > input{
 	width: calc(50% - 10px);
-<<<<<<< .mine
-	border-bottom:0px;//自己添加的
-||||||| .r42
-	border-bottom:
-=======
-	//border-bottom:
->>>>>>> .r43
+	//border-bottom:0px;
 }
 .search-list{
 	margin: 8px 0;

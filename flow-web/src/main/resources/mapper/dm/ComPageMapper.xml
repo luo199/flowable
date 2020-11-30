@@ -10,6 +10,8 @@
         <result column="CREATE_PERSON_ID" property="createPersonId" />
         <result column="CREATE_PERSON_NAME" property="createPersonName" />
         <result column="CREATE_TIME" property="createTime" />
+        <result column="CATALOG_CODE" property="catalogCode" />
+        <result column="CATALOG_NAME" property="catalogName"/>
     </resultMap>
 
 </mapper>

@@ -28,7 +28,7 @@ public class BusinessManage implements Serializable{
 	private BusinessBase base;
 	
 	@ApiModelProperty(value = "任务节点配置")
-	private List<TaskManage> taskManage;
+	private List<TaskManage> taskManages;
 	
 	@ApiModelProperty(value = "流程通用配置")
 	private ProcManage procManage;

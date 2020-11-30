@@ -84,6 +84,10 @@ window.portPath = {
     getPermissionByPermissionId:'/api/admin/formElePerm/get',//通过 permissionId 获取详情 
     removePermissionByPermissionId:'/api/admin/formElePerm/remove',//通过 permissionId 删除数据
     getlistAllRoles:'/api/index/listAllRoles',// 根据登录人权限获取左侧资源菜单
+
+    getListUserParentNodes:'/api/platform/user/parentNodes',//获取人员树全部机构节点
+    getListUserFindByPid:'/api/platform/user/findByPid',//点击父节点查找子节点
+
     /*--------------------流程设计(自定义)-------------------------------*/
     processDesignList: '/api/process/page',//流程定义列表
     checkModelKeyExist:'/api/process/findByModelKey',//检验流程key值是否存在
@@ -111,20 +115,83 @@ window.portPath = {
     checkBusinessCodeExist:'/api/business/findByBusinessCode',//校验code是否存在
     createbusinessBase:'/api/business/createBusiness',//新增业务定义
     updatebusinessBase:'/api/business/updateBusiness',//修改业务定义
-    cataLogList:'/api/businessCatalog/listAllCataLog',//业务类别列表
+    cataLogList:'/api/businessCatalog/childListCataLog',//业务类别列表
     querycataLogList:'/api/businessCatalog/page',//分页查询业务类别列表
     checkCataLogCodeExist:'/api/businessCatalog/findByCataLogCode',//校验code是否存在
+    checkCataLogPcodeExist:'/api/businessCatalog/findByCataLogPcode',//校验pcode是否存在
     createCataLog:'/api/businessCatalog/createBusinessCatalog',//新增业务类别
     findCataLogByCode:'/api/businessCatalog/findByCode',//根据code查询分类
+    findChildCataLogList:'/api/businessCatalog/childListCataLog',//查询该节点下的子节点列表
     updateCataLog:'/api/businessCatalog/updateCataLog',//修改分类
     checkBusinessByCatacode:'/api/business/checkBusinessByCatacode',//查询该分类下是否有业务
     updateCataLogStatus:'/api/businessCatalog/updateStatus',//删除分类-伪删除(修改状态)
+    saveChildCataLogList:'/api/businessCatalog/saveChildCataLogList',//保存子节点列表
+    findPcodeByCode:'/api/businessCatalog/findPcodeByCode',//根据编码查询父节点编码
+    
+    /*--------------------业务配置-------------------------------*/
+    commonViewsPage: '/api/business/commPage/page', //通用页面--分页查询
+    commonViewsSelect: '/api/business/commPage/selectList', //通用页面--不分页查询
+    commonViewsFindOne: '/api/business/commPage/findOne', //通用页面--按主键查询
+    commonViewsSave: '/api/business/commPage/save', //通用页面--保存
+    commonViewsDelete: '/api/business/commPage/deleteById', //通用页面--按主键删除
 
-    /*---------------------------test------------------------------------*/
-    testListPage:'/api/test/page',
-    testSave:'/api/test/save',
-    likesearch:'/api/test/search',
-    testGetByID:'/api/test/getbyid',
+    commonActionsPage: '/api/business/commAction/page',//通用按钮--分页查询
+    commonActionsList:'/api/business/commAction/actionsList',//通用按钮--用在选择按钮时下拉框获取全部按钮名
+    commonActionsSave: '/api/business/commAction/save',//通用按钮--保存按钮
+    commonActionsFindOne: '/api/business/commAction/findOne', //通用按钮--查找单个按钮
+    commonActionsDelete: '/api/business/commAction/deleteById', //通用按钮--删除按钮
+
+    /*--------------------人员配置-------------------------------*/
+    processExecutorPage: '/api/business/manage/executors/', //通用页面--分页查询
+    //commonViewsSelect: '/api/business/manage/selectList', //通用页面--不分页查询
+    processExecutorFindOne: '/api/business/manage/executor', //通用页面--按主键查询
+    processExecutorSave: '/api/business/manage/executor/save', //通用页面--保存
+    cprocessExecutorDelete: '/api/business/manage/executor/delete/', //通用页面--按主键删除
+
+
+    /*--------------------时限配置-------------------------------*/
+    processLimitPage:'/api/business/manage/timeLimit/',//流程时限查询
+    processLimitSave:'/api/business/manage/limit/save',//保存流程时限
+    processLimitDelete:'/api/business/manage/limit/deleteByTaskId',//按流程id删除时限
+    processLimitByprocessId:'/api/business/manage/limit/',//根据流程id获取信息
+
+
+
+    /*--------------------按钮配置-------------------------------*/
+    processActionsPage:'/api/business/manage/actions/',
+    processActionsSave:'/api/business/manage/actions/save',
+    processActionsDelete:'/api/business/manage/actions/deleteById',
+
+    /*--------------------表单定义-------------------------------*/
+    formDefPage: '/api/form/page', //表单定义页面--分页查询
+    formDefSave:'/api/form/save',//保存基础表单信息
+    formDefFindOne:'/api/form/getById',//根据主键查询
+    formDefDelete:'/api/form/delete',//根据主键删除
+    formDefFindAll:'/api/form/findAll',
+
+    /*--------------------视图配置-------------------------------*/
+    processViewsPage:'/api/business/manage/views/',
+    processViewsSave:'/api/business/manage/views/save',
+    processViewsDelete:'/api/business/manage/views/deleteByTaskId',
+
+    /*--------------------请休假表单-------------------------------*/
+    holidayManageList:'/api/holiday/manage',
+    startHolidayProcess:'/api/holiday/manage/startHolidayProcess',
+    holidayApproveProcess:'/api/holiday/manage/holidayApproveProcess',
+    holidayFinishProcess:'/api/holiday/manage/holidayFinish',
+    holidayRejectProcess:'/api/holiday/manage/holidayReject',
+
+
+    holidayFormSave:'/api/business/manage/HolidayForm/save',
+    holidayFormPage:'/api/business/manage/HolidayForm/page',
+    holidayFormApprovePage:'/api/business/manage/HolidayForm/approvePage',
+    holidayFormFindOne:'/api/business/manage/HolidayForm/findOne',
+    holidayFormDeleteById:'/api/business/manage/HolidayForm/deleteById',
+    getNextExecutor:'/api/business/manage/HolidayForm/getNextExecutor',
+    saveExecutorDetail:'/api/business/manage/executorDetail/save',
+
+
+
 
 
 

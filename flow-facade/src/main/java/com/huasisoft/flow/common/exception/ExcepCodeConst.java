@@ -22,7 +22,6 @@ public enum ExcepCodeConst {
 	OPERATE_FAIL("\u6570\u636e\u5f02\u5e38", 11),
 	/** 乐观锁异常 */
 	OPTIMISTIC_LOCKING_FAILURE_EXCEPTION("\u4fdd\u5b58\u5931\u8d25", 21) ;
-
 /** ----------------------------------------------------- properties 属性字段 ------------------------------------------------------------- */
 	
     // 成员变量  

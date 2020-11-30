@@ -1,25 +1,18 @@
 package com.huasisoft.flow;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
-import com.huasisoft.h1.constant.CommonConst;
 
+import io.swagger.annotations.ApiOperation;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -123,6 +116,18 @@ public class SwaggerConfig{
                 .build()
                 .groupName("业务管理")
                 ;
+    }
+    @Bean
+    public Docket createPlatformApi() {
+    	return new Docket(DocumentationType.SWAGGER_2)
+    			.apiInfo(apiInfo("平台管理","平台管理","1.0"))
+    			.select()
+    			.apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
+    			.apis(RequestHandlerSelectors.basePackage("com.huasisoft.flow.platform"))
+    			.paths(PathSelectors.any())
+    			.build()
+    			.groupName("平台管理")
+    			;
     }
 	public static Predicate<RequestHandler> basePackage(final String basePackage) {
         return input -> declaringClass(input).transform(handlerPackage(basePackage)).or(true);

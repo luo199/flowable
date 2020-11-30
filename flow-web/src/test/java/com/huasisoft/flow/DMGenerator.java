@@ -32,12 +32,12 @@ public class DMGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        String projectPath = System.getProperty("user.dir");
+        String projectPath = System.getProperty("user.dir")+"/flow-web";
         gc.setOutputDir(projectPath + "/src/main/java");
         //启用Swagger2模式
         gc.setSwagger2(true);
         // TODO 设置用户名
-        gc.setAuthor("flq");
+        gc.setAuthor("Luob");
         //是否打开生成的目录
         gc.setOpen(false);
         // service 命名方式
@@ -60,7 +60,7 @@ public class DMGenerator {
 
         // TODO 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:dm://127.0.0.1:5236/");
+        dsc.setUrl("jdbc:dm://192.168.50.30:5236/");
         dsc.setDriverName("dm.jdbc.driver.DmDriver");
         dsc.setUsername("FLOW");
         dsc.setPassword("FLOWFLOWFLOW");
@@ -134,9 +134,9 @@ public class DMGenerator {
         strategy.setEntityLombokModel(true);
         strategy.setTablePrefix("FLOW_BUSINESS");
         // 设置逻辑删除键
-        strategy.setLogicDeleteFieldName("deleted");
+//        strategy.setLogicDeleteFieldName("deleted");
         // TODO 指定生成的bean的数据库表名
-        strategy.setInclude("FLOW_BUSINESS_COM_ACTION","FLOW_BUSINESS_COM_PAGE");
+        strategy.setInclude("ACT_RU_TASK");
         //strategy.setSuperEntityColumns("id");
         // 驼峰转连字符
         strategy.setControllerMappingHyphenStyle(true);

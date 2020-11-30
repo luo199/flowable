@@ -5,6 +5,7 @@ import com.huasisoft.flow.business.entity.BusinessBase;
 import com.huasisoft.flow.business.service.BusinessBaseService;
 import com.huasisoft.flow.business.vo.BusinessPageRequest;
 import com.huasisoft.flow.common.vo.JsonResult;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,7 @@ public class BusinessDefController {
      * @param code
      * @return
      */
+    @ApiOperation("根据主键查询")
     @GetMapping("findByCode")
     public JsonResult<BusinessBase> findByCode(String code) {
         return new JsonResult<BusinessBase>(businessBaseService.findByCode(code));
@@ -35,6 +37,7 @@ public class BusinessDefController {
      * @param page
      * @return
      */
+    @ApiOperation("分页查询列表")
     @PostMapping("page")
     public JsonResult<IPage<BusinessBase>> page(@RequestBody BusinessPageRequest page) {
         return new JsonResult<IPage<BusinessBase>>(businessBaseService.page(page));
@@ -45,6 +48,7 @@ public class BusinessDefController {
      * @param businessBase
      * @return
      */
+    @ApiOperation("新增业务")
     @PostMapping("createBusiness")
     public JsonResult<BusinessBase> createBusiness(@RequestBody BusinessBase businessBase) {
         BusinessBase businessResult = businessBaseService.createBusiness(businessBase);
@@ -60,6 +64,7 @@ public class BusinessDefController {
      * @param businessBase
      * @return
      */
+    @ApiOperation("更新业务")
     @PostMapping("updateBusiness")
     public JsonResult<Integer> updateBusiness(@RequestBody BusinessBase businessBase) {
             return new JsonResult<Integer>(businessBaseService.updateBusiness(businessBase));
@@ -69,6 +74,7 @@ public class BusinessDefController {
      * @param code
      * @return
      */
+    @ApiOperation("查询流程code值是否存在")
     @GetMapping("findByBusinessCode")
     public JsonResult<Boolean> findByBusinessCode(String code) {
         return new JsonResult<>(businessBaseService.findByBusinessCode(code));
@@ -79,6 +85,7 @@ public class BusinessDefController {
      * @param cataCode
      * @return
      */
+    @ApiOperation("查询分类是否有业务列表")
     @GetMapping("checkBusinessByCatacode")
     public JsonResult<Boolean> checkBusinessByCatacode(String cataCode) {
         return new JsonResult<>(businessBaseService.checkBusinessByCatacode(cataCode));
@@ -88,6 +95,7 @@ public class BusinessDefController {
      * @param code
      * @return
      */
+    @ApiOperation("删除业务--伪删除")
     @GetMapping("updateStatus")
     public JsonResult<Integer> updateStatus(String code) {
         return new JsonResult<Integer>(businessBaseService.updateStatus(code));
@@ -98,6 +106,7 @@ public class BusinessDefController {
      * @param code
      * @return
      */
+    @ApiOperation("删除业务")
     @GetMapping("deleteByCode")
     public JsonResult<Integer> deleteByCode(String code) {
         return new JsonResult<Integer>(businessBaseService.deleteByCode(code));

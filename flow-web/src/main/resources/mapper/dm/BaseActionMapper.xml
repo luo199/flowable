@@ -9,6 +9,9 @@
         <result column="ACTION_ID" property="actionId" />
         <result column="ACTION_NAME" property="actionName" />
         <result column="ORDER_NUMBER" property="orderNumber" />
+        <result column="TASK_ID" property="taskId"/>
+        <result column="CATALOG_CODE" property="catalogCode"/>
+        <result column="CATALOG_NAME" property="catalogName"/>
     </resultMap>
 
 </mapper>

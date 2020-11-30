@@ -3,13 +3,13 @@ package com.huasisoft.flow.business.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.huasisoft.flow.platform.service.impl.CurrentUserHelper;
+import com.huasisoft.flow.platform.vo.Person;
 import org.apache.commons.lang3.StringUtils;
-import org.flowable.idm.api.User;
-import org.flowable.ui.common.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -45,6 +45,11 @@ public class BusinessBaseServiceImpl extends ServiceImpl<BusinessBaseMapper, Bus
     @Autowired
     private ActReProcdefService actReProcdefService;
 
+    /**
+     * 分页查询业务列表
+     * @param page
+     * @return
+     */
     @Override
     public IPage<BusinessBase> page(BusinessPageRequest page) {
         IPage<BusinessBase> userPage = new Page<>(page.getCurrent(), page.getSize());//参数一是当前页，参数二是每页个数
@@ -56,15 +61,22 @@ public class BusinessBaseServiceImpl extends ServiceImpl<BusinessBaseMapper, Bus
     }
 
 
+    /**
+     * 新增业务
+     * @param businessBase
+     * @return
+     */
     @Override
     @Transactional
     public BusinessBase createBusiness(BusinessBase businessBase) {
 
         //填入创建人信息
-        User user = SecurityUtils.getCurrentUserObject();
+        Person person = CurrentUserHelper.currentUser();
         businessBase.setCreatrTime(new Date());
-        businessBase.setCreatorId(user.getId());
-        businessBase.setCreatorName(user.getDisplayName());
+        businessBase.setCreatorId(person.getId());
+        businessBase.setCreatorName(person.getName());
+        businessBase.setCataName(null);
+        businessBase.setProcessName(null);
         //初始状态默认为 0
         businessBase.setStatus("0");
         boolean result = false;
@@ -80,6 +92,11 @@ public class BusinessBaseServiceImpl extends ServiceImpl<BusinessBaseMapper, Bus
         }
     }
 
+    /**
+     * 判断流程code是否存在
+     * @param code
+     * @return
+     */
     @Override
     public Boolean findByBusinessCode(String code) {
         QueryWrapper<BusinessBase> queryWrapper = new QueryWrapper<>();
@@ -88,6 +105,11 @@ public class BusinessBaseServiceImpl extends ServiceImpl<BusinessBaseMapper, Bus
         return businessList != null && businessList.size() > 0;
     }
 
+    /**
+     * 删除业务
+     * @param code
+     * @return
+     */
     @Override
     @Transactional
     public int updateStatus(String code) {
@@ -96,6 +118,11 @@ public class BusinessBaseServiceImpl extends ServiceImpl<BusinessBaseMapper, Bus
         return mapper.update(null, businessBaseUpdateWrapper);
     }
 
+    /**
+     * 删除业务
+     * @param code
+     * @return
+     */
     @Override
     @Transactional
     public int deleteByCode(String code) {
@@ -104,6 +131,11 @@ public class BusinessBaseServiceImpl extends ServiceImpl<BusinessBaseMapper, Bus
         return mapper.delete(lambda);
     }
 
+    /**
+     * 主键查询
+     * @param code
+     * @return
+     */
     @Override
     public BusinessBase findByCode(String code) {
         QueryWrapper<BusinessBase> queryWrapper = new QueryWrapper<>();
@@ -112,6 +144,11 @@ public class BusinessBaseServiceImpl extends ServiceImpl<BusinessBaseMapper, Bus
         return setcataNameAndProcessName(base);
     }
 
+    /**
+     * 更新业务
+     * @param businessBase
+     * @return
+     */
     @Override
     @Transactional
     public int updateBusiness(BusinessBase businessBase) {
@@ -124,6 +161,11 @@ public class BusinessBaseServiceImpl extends ServiceImpl<BusinessBaseMapper, Bus
         return mapper.update(null, businessBaseUpdateWrapper);
     }
 
+    /**
+     * 判断分类下是否有业务
+     * @param cataCode
+     * @return
+     */
     @Override
     public Boolean checkBusinessByCatacode(String cataCode) {
         QueryWrapper<BusinessBase> queryWrapper = new QueryWrapper<>();
@@ -131,8 +173,13 @@ public class BusinessBaseServiceImpl extends ServiceImpl<BusinessBaseMapper, Bus
         List<BusinessBase> businessList = list(queryWrapper);
         return businessList != null && businessList.size() > 0;
     }
-    
-    public BusinessBase setcataNameAndProcessName(BusinessBase base){
+
+    /**
+     * 设置分类名和流程名
+     * @param base
+     * @return
+     */
+    private BusinessBase setcataNameAndProcessName(BusinessBase base){
     	if(StringUtils.isNotBlank(base.getCataCode())) {
 	        QueryWrapper<BusinessCatalog> catalogWrapper = new QueryWrapper<BusinessCatalog>();
 	        catalogWrapper.eq("CODE", base.getCataCode());
